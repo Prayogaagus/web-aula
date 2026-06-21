@@ -7,14 +7,14 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
 </head>
 <body>
 
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <i class="fa-solid.fa-building-columns-logo_icon"></i>
+           <img src="{{ asset('images/Logo_Polman.png') }}"  class="img-logo">
                 <div class="logo-text">
                     <span class="brand-title">Penyewaan Aula</span>
                     <span class="brand-sub">POLMAN BABEL</span>
@@ -22,13 +22,13 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="#" class="active">Beranda</a></li>
-                <li><a href="#">Detail Aula</a></li>
-                <li><a href="#">Jadwal</a></li>
-                <li><a href="#">Kritik & Saran</a></li>
+                <li><a href="{{ route('detail.aula') }}">Detail Aula</a></li>
+                <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
+               <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
             </ul>
             <div class="nav-auth">
-                <a href="#" class="btn-login">Masuk</a>
-                <a href="#" class="btn-register">Daftar</a>
+               <a href="{{ route('login') }}" class="btn-login">Masuk</a>
+             <a href="{{ route('register') }}" class="btn-register">Daftar</a>
             </div>
         </div>
     </nav>
@@ -39,7 +39,7 @@
                 <h1>Sewa Aula POLMAN Babel dengan Mudah</h1>
                 <p>Pesan ruang acara resmi kampus secara online, cepat, dan transparan</p>
                 <div class="hero-buttons">
-                    <a href="#" class="btn-orange">Lihat Ketersediaan</a>
+                <a href="{{ route('detail.aula') }}" class="btn-orange">Lihat Ketersediaan</a>
                     <a href="#" class="btn-outline">Pesan Sekarang</a>
                 </div>
             </div>

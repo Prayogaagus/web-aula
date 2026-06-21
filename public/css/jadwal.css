@@ -1,0 +1,197 @@
+/* jadwal.css - Khusus Halaman Cek Ketersediaan Jadwal */
+
+/* HERO JADWAL */
+.jadwal-hero {
+    background-color: var(--primary-blue);
+    color: #ffffff;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.jadwal-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fcd34d; /* Warna kuning aksen mendatar */
+    margin-bottom: 10px;
+}
+
+.jadwal-hero p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* CONTAINER UTAMA KALENDER */
+.calendar-section {
+    padding: 50px 0;
+    background-color: #f8fafc;
+}
+
+.calendar-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    margin-bottom: 40px;
+}
+
+/* HEADER KALENDER (Keterangan & Navigasi Bulan) */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.status-indicators {
+    display: flex;
+    gap: 20px;
+}
+
+.indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot.tersedia { background-color: #22c55e; }
+.dot.dipesan { background-color: #ef4444; }
+.dot.tidak-tersedia { background-color: #94a3b8; }
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.btn-nav-cal {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: #475569;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btn-nav-cal:hover {
+    color: var(--primary-blue);
+}
+
+.current-month {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+    min-width: 100px;
+    text-align: center;
+}
+
+/* GRID KALENDER */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    text-align: center;
+}
+
+/* NAMA-NAMA HARI */
+.day-name {
+    font-weight: 700;
+    color: #64748b;
+    font-size: 0.95rem;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+/* KOTAK TANGGAL */
+.day-cell {
+    background: #ffffff;
+    padding: 15px 5px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    min-height: 80px;
+}
+
+.day-number {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark-blue);
+}
+
+.day-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* VARIASI WARNA STATUS TANGGAL */
+.cell-tersedia .day-status { color: #22c55e; }
+.cell-dipesan .day-status { color: #ef4444; }
+.cell-tidak-tersedia .day-number { color: #cbd5e1; }
+.cell-tidak-tersedia .day-status { color: #94a3b8; }
+
+/* GRID KARTU INFORMASI DI BAWAH */
+.info-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.info-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+}
+
+.info-card-icon {
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+}
+
+.info-card h3 {
+    font-size: 1.1rem;
+    color: var(--dark-blue);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.info-card p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .info-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .calendar-grid {
+        gap: 5px;
+    }
+    .day-cell {
+        min-height: 65px;
+        padding: 10px 2px;
+    }
+    .day-status {
+        font-size: 0.65rem;
+    }
+}

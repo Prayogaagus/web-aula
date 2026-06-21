@@ -1,0 +1,299 @@
+/* detail.css - Pengaturan Khusus Halaman Detail Aula */
+
+/* CONTAINER UTAMA DETAIL */
+.detail-section {
+    padding: 40px 0 60px 0;
+    background-color: #ffffff;
+}
+
+/* LAYOUT GRID UTAMA (Kiri: Info & Fasilitas, Kanan: Card Harga & Aksi) */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    align-items: start;
+    margin-top: 25px;
+}
+
+/* GALERI FOTO */
+.gallery-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+.thumbnail-grid {
+    display: flex;
+    gap: 12px;
+}
+
+.thumbnail-item {
+    width: 80px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.thumbnail-item:hover, .thumbnail-item.active {
+    border-color: var(--primary-blue);
+    opacity: 0.9;
+}
+
+/* KONTEN INFORMASI */
+.detail-info h2 {
+    font-size: 2rem;
+    color: var(--dark-blue);
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.detail-desc {
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-size: 1rem;
+    margin-bottom: 35px;
+}
+
+/* SUB SECTION (PAKET & KETENTUAN) */
+.sub-title-line {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.sub-title-line h3 {
+    font-size: 1.25rem;
+    color: var(--dark-blue);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sub-title-line .line {
+    flex: 1;
+    height: 1px;
+    background-color: var(--orange-accent);
+}
+
+/* TAB PAKET */
+.packet-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.btn-tab-packet {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.btn-tab-packet.active {
+    border-color: var(--primary-blue);
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(11, 58, 123, 0.08);
+    color: var(--dark-blue);
+}
+
+/* LIST FASILITAS DI DETAIL */
+.detail-facilities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 35px;
+}
+
+.facility-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 15px 20px;
+    border-radius: 8px;
+}
+
+.facility-detail-item i {
+    font-size: 1.25rem;
+    color: var(--primary-blue);
+    width: 24px;
+}
+
+.facility-text-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.facility-text-name {
+    font-weight: 600;
+    color: var(--dark-blue);
+    font-size: 0.95rem;
+}
+
+.facility-text-qty {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* KETENTUAN LIST */
+.rules-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.rules-list li {
+    display: flex;
+    gap: 12px;
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.rules-list .num {
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+
+/* CARD SIDEBAR (KANAN) */
+.sticky-sidebar {
+    position: sticky;
+    top: 90px; /* Menjaga card tetap melayang rapi saat di-scroll */
+}
+
+.price-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.price-label {
+    font-size: 0.9rem;
+    color: var(--orange-accent);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.price-amount {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+}
+
+.price-unit {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    display: block;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 15px;
+}
+
+/* SPEK SINGKAT SIDEBAR */
+.spec-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.spec-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.spec-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--dark-blue);
+}
+
+/* TOMBOL AKSI SIDEBAR */
+.btn-sidebar-check {
+    width: 100%;
+    background-color: #f1f5f9;
+    color: #475569;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 12px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.btn-sidebar-check:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-sidebar-order {
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.btn-sidebar-order:hover {
+    background-color: var(--dark-blue);
+}
+
+.sidebar-note {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 15px;
+    display: block;
+}
+
+/* LOGIKA INTERAKSI TAB FRONTEND */
+.packet-content {
+    display: none; /* Menyembunyikan konten secara default */
+}
+
+.packet-content.active {
+    display: block; /* Menampilkan konten jika memiliki class active */
+}
+
