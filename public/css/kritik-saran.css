@@ -1,0 +1,493 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.feedback-body {
+    background-color: #f8fafc;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1e293b;
+}
+
+/* ==================== GLOBAL NAVBAR ==================== */
+.global-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 15px 60px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-logo-icon {
+    font-size: 1.8rem;
+    color: #0b3a7b;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-brand {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1e293b;
+    line-height: 1.2;
+}
+
+.sub-brand {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.nav-links a.active {
+    color: #0b3a7b;
+    border-bottom: 2px solid #0b3a7b;
+}
+
+.btn-logout {
+    background-color: #0b3a7b;
+    color: white !important;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+/* ==================== HERO BANNER ==================== */
+.hero-feedback-banner {
+    position: relative;
+    height: 280px;
+    background-image: url('../images/aula_polman.jpeg'); /* Sesuai aset gambar gedung */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #ffffff;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 58, 123, 0.85); /* Tint Biru Gelap Utama */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 5;
+    padding: 0 20px;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* ==================== CONTAINER CONFIG ==================== */
+.feedback-container {
+    max-width: 950px;
+    margin: -40px auto 60px auto;
+    position: relative;
+    z-index: 10;
+    padding: 0 20px;
+}
+
+/* Section Title Modifiers */
+.form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 35px;
+    margin-bottom: 15px;
+    color: #0b3a7b;
+}
+
+.section-icon {
+    font-size: 1.25rem;
+}
+
+.form-section-title h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+/* Container Cards */
+.form-card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 25px 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.input-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.mt-3 {
+    margin-top: 18px;
+}
+
+/* Form Items Layouts */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.form-group label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.form-group label .required {
+    color: #ef4444;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    color: #334155;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #0b3a7b;
+}
+
+.form-group textarea {
+    resize: none;
+}
+
+.char-count {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-align: right;
+    margin-top: -2px;
+}
+
+/* ==================== RADIO CATEGORY CARDS ==================== */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.category-card {
+    cursor: pointer;
+    position: relative;
+}
+
+.category-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.card-content {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 30px 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease;
+}
+
+.card-content i {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+/* Icon Colors */
+.icon-kritik { color: #2563eb; }
+.icon-saran { color: #3b82f6; }
+.icon-apresiasi { color: #10b981; }
+.icon-lainnya { color: #64748b; }
+
+.card-content h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.card-content p {
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+/* Custom Radio Indicator Bubble */
+.custom-radio {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    background: #ffffff;
+}
+
+/* Radio Checked State Changes */
+.category-card input[type="radio"]:checked + .card-content {
+    border-color: #0b3a7b;
+    box-shadow: 0 4px 20px rgba(11, 58, 123, 0.08);
+}
+
+.category-card input[type="radio"]:checked + .card-content .custom-radio {
+    border-color: #0b3a7b;
+    background: #0b3a7b;
+}
+
+.category-card input[type="radio"]:checked + .card-content .custom-radio::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ffffff;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* ==================== STAR RATING INTERACTION ==================== */
+.rating-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0f172a;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.star-rating-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.star-rating-wrapper input {
+    display: none;
+}
+
+.star-rating-wrapper label {
+    font-size: 1.6rem;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+/* Hover & Active States for Stars */
+.star-rating-wrapper label:hover,
+.star-rating-wrapper label:hover ~ label,
+.star-rating-wrapper input:checked ~ label {
+    color: #fbbf24;
+    content: "\f005";
+}
+
+/* ==================== ALERTS & ACTIONS ==================== */
+.info-alert-box {
+    background-color: #e2e8f0;
+    border-radius: 6px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    align-items: flex-start;
+}
+
+.info-icon {
+    color: #2563eb;
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.info-text-content h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.info-text-content p {
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+/* Button Submit Action */
+.btn-submit-feedback {
+    width: 100%;
+    background-color: #f59e0b;
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: background-color 0.2s;
+}
+
+.btn-submit-feedback:hover {
+    background-color: #d97706;
+}
+
+/* ==================== GLOBAL FOOTER ==================== */
+.global-footer {
+    background-color: #0c1e3f;
+    color: #94a3b8;
+    padding: 50px 60px 20px 60px;
+    font-size: 0.85rem;
+    margin-top: 80px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 80px;
+    border-bottom: 1px solid #1e293b;
+    padding-bottom: 40px;
+}
+
+.footer-brand-section .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.footer-brand-section p {
+    line-height: 1.6;
+}
+
+.footer-links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.footer-links-grid h5 {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.footer-links-grid ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links-grid ul a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-links-grid ul a:hover {
+    color: #ffffff;
+}
+
+.contact-list li {
+    display: flex;
+    gap: 10px;
+    line-height: 1.5;
+}
+
+.contact-list i {
+    color: #f97316;
+    margin-top: 3px;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 0.8rem;
+}
+
+/* ==================== RESPONSIVE CONTROL ==================== */
+@media (max-width: 850px) {
+    .category-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .input-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .global-navbar {
+        padding: 15px 20px;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    .footer-links-grid {
+        grid-template-columns: 1fr;
+    }
+}

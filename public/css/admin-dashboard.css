@@ -1,0 +1,318 @@
+
+        :root {
+            --primary-blue: #0b3a7a;
+            --dark-bg: #1a1c29;
+            --text-dark: #333;
+            --text-gray: #666;
+            --bg-light: #f4f6f9;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 5px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- Hero Section --- */
+.hero-section {
+    /* Gradasi warna biru gelap (overlay) + Gambar Latar Belakang */
+    background-image: linear-gradient(rgba(11, 58, 122, 0.85), rgba(11, 58, 122, 0.85)), url('../images/aula_polman.jpeg');
+    
+    /* Memastikan gambar menutup seluruh area hero tanpa gepeng */
+    background-size: cover; 
+    
+    /* Memfokuskan posisi gambar tepat di tengah */
+    background-position: center center;
+    
+    /* Mencegah gambar berulang/patah jika layarnya sangat lebar */
+    background-repeat: no-repeat;
+    
+    color: white;
+    text-align: center;
+    
+    /* Padding diperbesar: 140px atas (jarak tulisan ke navbar), 200px bawah (space untuk kartu) */
+    padding: 80px 20px 200px 20px; 
+    
+    /* Opsional: memberi sedikit efek parallax halus saat di-scroll */
+    background-attachment: scroll; 
+}
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* --- Container Utama --- */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Stat Cards (Efek Overlap) --- */
+        .stat-cards-wrapper {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: -60px; /* Ini yang membuat efek menumpuk ke atas hero */
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+        }
+
+        .stat-icon.warning { color: var(--warning); }
+
+        .stat-details h3 {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 5px;
+        }
+
+        .stat-details .number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .stat-details .trend {
+            font-size: 0.8rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+        .stat-details .trend.alert { color: var(--warning); }
+
+        /* --- Grid Tengah (Grafik & Aktivitas) --- */
+        .middle-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Dummy Area untuk Grafik */
+        .chart-placeholder {
+            height: 250px;
+            border: 1px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-gray);
+        }
+
+        /* --- List Aktivitas --- */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity-item:last-child { border: none; margin: 0; padding: 0; }
+
+        .activity-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .icon-blue { background-color: var(--primary-blue); }
+        .icon-green { background-color: var(--success); }
+        .icon-yellow { background-color: var(--warning); }
+        .icon-purple { background-color: #6f42c1; }
+
+        .activity-text { flex-grow: 1; font-size: 0.85rem; }
+        .activity-text strong { display: block; color: var(--text-dark); }
+        .activity-time { font-size: 0.75rem; color: var(--text-gray); }
+
+        /* --- Tabel Data --- */
+        .table-container {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-container th, .table-container td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table-container th {
+            background-color: #f8f9fa;
+            color: var(--text-gray);
+            font-weight: 600;
+        }
+
+        .status { font-weight: bold; }
+        .status-menunggu { color: var(--warning); }
+        .status-dikonfirmasi { color: var(--success); }
+        .status-selesai { color: var(--primary-blue); }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 50px 20px 20px 20px;
+            margin-top: 50px;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-col h4 { margin-bottom: 15px; font-size: 1rem; }
+        .footer-col p, .footer-col a, .footer-col li {
+            color: #aaa;
+            font-size: 0.85rem;
+            text-decoration: none;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .footer-col ul { list-style: none; }
+        .contact-item { display: flex; gap: 10px; align-items: center; }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+/* --- Brand & Logo Styling --- */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Jarak antara logo dan teks */
+}
+
+.nav-logo {
+    width: 40px;  /* Sesuaikan ukuran proporsional logo */
+    height: auto;
+    object-fit: contain;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-blue);
+    line-height: 1.2;
+}
+
+.brand-subtitle {
+    font-size: 0.7rem;
+    color: var(--text-gray);
+    font-weight: 500;
+}

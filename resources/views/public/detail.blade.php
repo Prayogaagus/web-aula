@@ -38,17 +38,17 @@
                 
                 <div class="left-column">
                     
-                    <div class="gallery-container">
-                        <div class="main-image">
-                            <img id="view-primary" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200" alt="Aula POLMAN Babel">
-                        </div>
-                        <div class="thumbnail-grid">
-                            <img class="thumbnail-item active" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200" onclick="changeImage(this)" alt="View 1">
-                            <img class="thumbnail-item" src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600" onclick="changeImage(this)" alt="View 2">
-                            <img class="thumbnail-item" src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=600" onclick="changeImage(this)" alt="View 3">
-                            <img class="thumbnail-item" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600" onclick="changeImage(this)" alt="View 4">
-                        </div>
-                    </div>
+                <div class="gallery-container">
+    <div class="main-image">
+        <img id="view-primary" src="{{ asset('images/aula/detail1.jpeg') }}" alt="Aula POLMAN Babel">
+    </div>
+    <div class="thumbnail-grid">
+        <img class="thumbnail-item active" src="{{ asset('images/aula/detail1.jpeg') }}" onclick="changeImage(this)" alt="View 1">
+        <img class="thumbnail-item" src="{{ asset('images/aula/detail2.jpeg') }}" onclick="changeImage(this)" alt="View 2">
+        <img class="thumbnail-item" src="{{ asset('images/aula/detail3.jpeg') }}" onclick="changeImage(this)" alt="View 3">
+        <img class="thumbnail-item" src="{{ asset('images/aula/detail4.jpeg') }}" onclick="changeImage(this)" alt="View 4">
+    </div>
+</div>
 
                     <div class="detail-info">
                         <h2>Aula Serbaguna POLMAN Babel</h2>

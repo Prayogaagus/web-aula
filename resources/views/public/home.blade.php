@@ -26,21 +26,34 @@
                 <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
                <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
             </ul>
-            <div class="nav-auth">
-               <a href="{{ route('login') }}" class="btn-login">Masuk</a>
-             <a href="{{ route('register') }}" class="btn-register">Daftar</a>
-            </div>
+<div class="nav-auth">
+    @auth
+        <span class="user-name" style="margin-right: 15px; color: #333; font-weight: 600;">
+            <i class="fa-solid fa-user-circle"></i> {{ Auth::user()->name }}
+        </span>
+        <a href="#" class="btn-register" onclick="alert('Fitur Logout akan diaktifkan oleh Backend Developer.'); return false;">
+           Keluar
+        </a>
+    @else
+        <a href="{{ route('login') }}" class="btn-login">Masuk</a>
+        <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+    @endauth
+</div>
         </div>
     </nav>
 
-    <header class="hero">
+    <header class="hero" style="background-image: url('{{ asset('images/aula_polman.jpeg') }}');">`
         <div class="hero-overlay">
             <div class="hero-content">
                 <h1>Sewa Aula POLMAN Babel dengan Mudah</h1>
                 <p>Pesan ruang acara resmi kampus secara online, cepat, dan transparan</p>
                 <div class="hero-buttons">
                 <a href="{{ route('detail.aula') }}" class="btn-orange">Lihat Ketersediaan</a>
-                    <a href="#" class="btn-outline">Pesan Sekarang</a>
+                    @auth
+        <a href="{{ route('pemesanan') }}" class="btn-outline">Pesan Sekarang</a>
+    @else
+        <a href="{{ route('login') }}" class="btn-outline" onclick="alert('Silakan login terlebih dahulu untuk melakukan pemesanan aula.')">Pesan Sekarang</a>
+    @endauth
                 </div>
             </div>
         </div>
@@ -75,31 +88,39 @@
             </p>
             
             <div class="about-features">
-                <div class="feature-item">
-                    <i class="fa-solid fa-fan feature-icon"></i>
-                    <div>
-                        <h4>AC & Sound System</h4>
-                        <p>Sistem pendingin dan audio profesional.</p>
-                    </div>
-                </div>
-                <div class="feature-item">
-                    <i class="fa-solid fa-square-p feature-icon"></i>
-                    <div>
-                        <h4>Parkir Luas</h4>
-                        <p>Area parkir yang nyaman untuk ratusan kendaraan.</p>
-                    </div>
-                </div>
-                <div class="feature-item">
-                    <i class="fa-solid fa-video feature-icon"></i>
-                    <div>
-                        <h4>Proyektor & Layar</h4>
-                        <p>Peralatan presentasi modern berkualitas tinggi.</p>
-                    </div>
-                </div>
-            </div>
+    <div class="feature-item">
+        <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-fan feature-icon"></i>
+        </div>
+        <div>
+            <h4>AC & Sound System</h4>
+            <p>Sistem pendingin dan audio profesional.</p>
+        </div>
+    </div>
+    
+    <div class="feature-item">
+        <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-square-parking feature-icon"></i>
+        </div>
+        <div>
+            <h4>Parkir Luas</h4>
+            <p>Area parkir yang nyaman untuk ratusan kendaraan.</p>
+        </div>
+    </div>
+    
+    <div class="feature-item">
+        <div class="feature-icon-wrapper">
+            <i class="fa-solid fa-video feature-icon"></i>
+        </div>
+        <div>
+            <h4>Proyektor & Layar</h4>
+            <p>Peralatan presentasi modern berkualitas tinggi.</p>
+        </div>
+    </div>
+</div>
         </div>
         <div class="about-image">
-            <div class="img-placeholder">[ Foto Gedung Aula ]</div>
+           <img src="{{ asset('images/aula_polman.jpeg') }}" alt="Gedung Aula Serbaguna POLMAN Babel" class="img-aula-fluid">
         </div>
     </section>
 
@@ -152,35 +173,39 @@
     </section>
 
     <section class="steps-section container">
-        <h2 class="section-title">Cara Pemesanan</h2>
-        <div class="steps-grid">
-            <div class="step-item">
-                <div class="step-number">1</div>
-                <h3>Daftar Akun</h3>
-                <p>Buat akun dengan data lengkap dan valid.</p>
-            </div>
-            <div class="step-item">
-                <div class="step-number">2</div>
-                <h3>Pilih Jadwal</h3>
-                <p>Lihat ketersediaan dan pilih tanggal acara.</p>
-            </div>
-            <div class="step-item">
-                <div class="step-number">3</div>
-                <h3>Isi Form</h3>
-                <p>Lengkapi detail acara dan kebutuhan khusus.</p>
-            </div>
-            <div class="step-item">
-                <div class="step-number">4</div>
-                <h3>Bayar & Konfirmasi</h3>
-                <p>Lakukan pembayaran dan terima konfirmasi.</p>
-            </div>
+    <h2 class="section-title">Cara Pemesanan</h2>
+    <div class="steps-grid">
+        <div class="step-item">
+            <div class="step-number">1</div>
+            <h3>Daftar Akun</h3>
+            <p>Buat akun dengan data lengkap dan valid.</p>
         </div>
-    </section>
+        <div class="step-item">
+            <div class="step-number">2</div>
+            <h3>Pilih Jadwal</h3>
+            <p>Lihat ketersediaan dan pilih tanggal acara.</p>
+        </div>
+        <div class="step-item">
+            <div class="step-number">3</div>
+            <h3>Isi Form</h3>
+            <p>Lengkapi detail acara dan kebutuhan khusus.</p>
+        </div>
+        <div class="step-item">
+            <div class="step-number">4</div>
+            <h3>Bayar & Konfirmasi</h3>
+            <p>Lakukan pembayaran dan terima konfirmasi.</p>
+        </div>
+    </div>
+</section>
 
     <section class="cta-section">
         <h2>Siap Mengadakan Acara di POLMAN Babel?</h2>
         <p>Jangan lewatkan kesempatan untuk menggunakan aula terbaik dengan fasilitas lengkap.</p>
-        <a href="#" class="btn-orange-large">Pesan Aula Sekarang</a>
+        @auth
+        <a href="{{ route('pemesanan') }}" class="btn-orange-large">Pesan Aula Sekarang</a>
+    @else
+        <a href="{{ route('login') }}" class="btn-orange-large" onclick="alert('Silakan login terlebih dahulu untuk melakukan pemesanan aula.')">Pesan Aula Sekarang</a>
+    @endauth
     </section>
 
     <footer class="main-footer">

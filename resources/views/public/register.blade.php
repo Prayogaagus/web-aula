@@ -6,6 +6,7 @@
     <title>Daftar - Sistem Informasi Penyewaan Aula POLMAN BABEL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="auth-body">
 
@@ -22,7 +23,17 @@
                 <a href="{{ route('register') }}" class="tab-link active">Daftar</a>
             </div>
 
-            <form action="#" method="POST" class="auth-form">
+            @if ($errors->any())
+    <div style="background: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+          <form action="{{ route('register.post') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="nama_lengkap">Nama Lengkap</label>
@@ -94,6 +105,9 @@
                 icon.classList.add("fa-eye");
             }
         }
+
+        // Script Notifikasi Pop-up
+        
     </script>
 </body>
 </html>

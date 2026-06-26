@@ -6,6 +6,7 @@
     <title>Masuk - Sistem Informasi Penyewaan Aula POLMAN BABEL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="auth-body">
 
@@ -22,7 +23,7 @@
                 <a href="{{ route('register') }}" class="tab-link">Daftar</a>
             </div>
 
-            <form action="#" method="POST" class="auth-form">
+           <form action="{{ route('login.post') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -71,6 +72,25 @@
                 icon.classList.add("fa-eye");
             }
         }
+
+        // Script Notifikasi Pop-up
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#0b3a7b'
+            });
+        @endif
+
+        @if($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Masuk',
+                text: 'Email atau password yang Anda masukkan salah.',
+                confirmButtonColor: '#d33'
+            });
+        @endif
     </script>
 </body>
 </html>
