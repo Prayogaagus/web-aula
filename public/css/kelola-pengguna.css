@@ -1,0 +1,256 @@
+.filter-wrapper { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px; 
+    flex-wrap: wrap; 
+    gap: 15px; 
+}
+.tabs-peran { 
+    display: flex; 
+    gap: 20px; 
+    border-bottom: 2px solid #e0e0e0; 
+    width: 100%; 
+    margin-bottom: 15px; 
+}
+.tab-item { 
+    padding: 10px 5px; 
+    text-decoration: none; 
+    color: #666; 
+    font-weight: 600; 
+    border-bottom: 3px solid transparent; 
+    transition: 0.3s; 
+}
+.tab-item.active { 
+    color: #0b3a7a; 
+    border-bottom-color: #0b3a7a; 
+}
+.btn-tambah { 
+    background-color: #fca311; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    text-decoration: none; 
+    transition: 0.2s; 
+}
+.btn-tambah:hover { 
+    background-color: #e59209; 
+}
+.search-filter-box { 
+    display: flex; 
+    justify-content: space-between; 
+    width: 100%; 
+    align-items: center; 
+    gap: 15px; 
+}
+.search-input-wrapper { 
+    position: relative; 
+    flex-grow: 1; 
+    max-width: 450px; 
+}
+.search-input-wrapper input { 
+    width: 100%; 
+    padding: 10px 10px 10px 40px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    font-size: 14px; 
+}
+.search-input-wrapper i { 
+    position: absolute; 
+    left: 15px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    color: #aaa; 
+}
+.right-filters { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+.action-btns { 
+    display: flex; 
+    gap: 8px; 
+}
+.btn-action { 
+    width: 32px; 
+    height: 32px; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 6px; 
+    background: white; 
+    text-decoration: none; 
+    font-size: 14px; 
+    transition: 0.2s; 
+    cursor: pointer; 
+}
+.btn-action.view { color: #0b3a7a; }
+.btn-action.edit { color: #0b3a7a; }
+.btn-action.delete { color: #e71d36; }
+.btn-action:hover { background-color: #f5f5f5; }
+
+.pagination-wrapper { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 20px; 
+    color: #0b3a7a; 
+    font-size: 14px; 
+}
+.page-nav { display: flex; gap: 5px; }
+.page-link-btn { 
+    padding: 5px 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    text-decoration: none; 
+    color: #333; 
+}
+.page-link-btn.active { 
+    background-color: #0b3a7a; 
+    color: white; 
+    border-color: #0b3a7a; 
+}
+
+/* ==========================================
+   STYLE NOTIFICATION ALERT
+   ========================================== */
+.alert-success { 
+    background-color: #d4edda; 
+    color: #155724; 
+    padding: 12px; 
+    border-radius: 6px; 
+    margin-bottom: 20px; 
+    border: 1px solid #c3e6cb; 
+    font-weight: 500; 
+}
+.alert-danger { 
+    background-color: #f8d7da; 
+    color: #721c24; 
+    padding: 12px; 
+    border-radius: 6px; 
+    margin-bottom: 20px; 
+    border: 1px solid #f5c6cb; 
+}
+.alert-danger ul { margin: 5px 0 0 20px; padding: 0; }
+
+/* ==========================================
+   STYLE POPUP MODAL (TAMBAH & EDIT)
+   ========================================== */
+.modal-backdrop { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 1000; 
+    opacity: 0; 
+    visibility: hidden; 
+    transition: 0.3s ease; 
+}
+.modal-backdrop.show { 
+    opacity: 1; 
+    visibility: visible; 
+}
+.modal-box { 
+    background: white; 
+    width: 100%; 
+    max-width: 500px; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+    transform: translateY(-30px); 
+    transition: 0.3s ease; 
+}
+.modal-backdrop.show .modal-box { 
+    transform: translateY(0); 
+}
+.modal-header { 
+    background: #0b3a7a; 
+    color: white; 
+    padding: 15px 20px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 18px; 
+    font-weight: bold; 
+}
+.modal-close { 
+    background: none; 
+    border: none; 
+    color: white; 
+    font-size: 20px; 
+    cursor: pointer; 
+}
+.modal-body { padding: 20px; }
+.form-group { margin-bottom: 15px; }
+.form-group label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: 600; 
+    color: #333; 
+    font-size: 14px; 
+}
+.form-control { 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    font-size: 14px; 
+    box-sizing: border-box; 
+}
+.form-control:focus { 
+    border-color: #0b3a7a; 
+    outline: none; 
+}
+.modal-footer { 
+    padding: 15px 20px; 
+    border-top: 1px solid #eee; 
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 10px; 
+}
+.btn-secondary { 
+    background: #6c757d; 
+    color: white; 
+    border: none; 
+    padding: 9px 15px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: 500; 
+}
+.btn-primary { 
+    background: #0b3a7a; 
+    color: white; 
+    border: none; 
+    padding: 9px 15px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: 500; 
+}
+.btn-primary:hover { 
+    background: #082a59; 
+}
+/* Sifat tambahan untuk field Alamat (Textarea) di dalam form */
+.rows-textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+/* Modifikasi agar tabel dapat menampung kolom teks alamat dengan rapi */
+.table-container th, .table-container td {
+    padding: 12px 10px;
+    text-align: left;
+    vertical-align: middle;
+}

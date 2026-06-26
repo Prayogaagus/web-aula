@@ -26,8 +26,22 @@
                 <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
             </ul>
             <div class="nav-auth">
-                <a href="{{ route('login') }}" class="btn-login">Masuk</a>
-                <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+                @auth
+                    <span class="user-name" style="margin-right: 15px; color: #333; font-weight: 600;">
+                        <i class="fa-solid fa-user-circle"></i> {{ Auth::user()->name }}
+                    </span>
+                    
+                    <a href="{{ route('logout') }}" class="btn-register" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                       Keluar
+                    </a>
+                    
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn-login">Masuk</a>
+                    <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+                @endauth
             </div>
         </div>
     </nav>
@@ -35,7 +49,7 @@
     <header class="jadwal-hero">
         <div class="container">
             <h1>Cek Ketersediaan Jadwal</h1>
-            <p>Lihat tanggal yang tersedia untuk pemesanan aula</p>
+            <p>Lihat tanggal yang tersedia untuk pemesanan aula pada bulan ini</p>
         </div>
     </header>
 
@@ -50,9 +64,9 @@
                         <div class="indicator"><span class="dot tidak-tersedia"></span> Tidak Tersedia</div>
                     </div>
                     <div class="calendar-nav">
-                        <button class="btn-nav-cal"><i class="fa-solid fa-chevron-left"></i></button>
-                        <span class="current-month">Mei 2026</span>
-                        <button class="btn-nav-cal"><i class="fa-solid fa-chevron-right"></i></button>
+                        <button class="btn-nav-cal" style="opacity: 0.3; cursor: not-allowed;" disabled><i class="fa-solid fa-chevron-left"></i></button>
+                        <span class="current-month">{{ $date->translatedFormat('F Y') }}</span>
+                        <button class="btn-nav-cal" style="opacity: 0.3; cursor: not-allowed;" disabled><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                 </div>
 
@@ -65,43 +79,44 @@
                     <div class="day-name">Jum</div>
                     <div class="day-name">Sab</div>
 
-                    <div class="day-cell placeholder"></div>
-                    <div class="day-cell placeholder"></div>
-                    <div class="day-cell placeholder"></div>
-                    <div class="day-cell placeholder"></div>
-                    <div class="day-cell placeholder"></div>
+                    @php
+                        $daysInMonth = $date->daysInMonth;
+                        $firstDayOfWeek = $date->copy()->firstOfMonth()->dayOfWeek; // 0 = Minggu, 6 = Sabtu
+                    @endphp
 
-                    <div class="day-cell cell-tersedia"><span class="day-number">1</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-dipesan"><span class="day-number">2</span><span class="day-status">Seminar Nasional</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">3</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">4</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">5</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">6</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">7</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">8</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">9</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">10</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">11</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">12</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">13</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">14</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">15</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-dipesan"><span class="day-number">16</span><span class="day-status">Rapat Dinas</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">17</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">18</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">19</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">20</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">21</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">22</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">23</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">24</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">25</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">26</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">27</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tidak-tersedia"><span class="day-number">28</span><span class="day-status">Tidak Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">29</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-tersedia"><span class="day-number">30</span><span class="day-status">Tersedia</span></div>
-                    <div class="day-cell cell-dipesan"><span class="day-number">31</span><span class="day-status">Acara Pernikahan</span></div>
+                    @for ($i = 0; $i < $firstDayOfWeek; $i++)
+                        <div class="day-cell placeholder"></div>
+                    @endfor
+
+                    @for ($day = 1; $day <= $daysInMonth; $day++)
+                        @php
+                            $currentDate = $date->copy()->day($day);
+                            $dayOfWeek = $currentDate->dayOfWeek; // 0=Min, 1=Sen, ..., 5=Jum, 6=Sab
+                            
+                            // Aturan: Hanya Jum'at (5), Sabtu (6), Minggu (0) yang tersedia
+                            $isAvailableDay = in_array($dayOfWeek, [0, 5, 6]); 
+                            
+                            // Cek database apakah tanggal ini ada yang booking
+                            $booking = $bookings->get($day);
+                        @endphp
+
+                        @if ($booking)
+                            <div class="day-cell cell-dipesan">
+                                <span class="day-number">{{ $day }}</span>
+                                <span class="day-status">{{ $booking->jenis_acara }}</span>
+                            </div>
+                        @elseif (!$isAvailableDay)
+                            <div class="day-cell cell-tidak-tersedia">
+                                <span class="day-number">{{ $day }}</span>
+                                <span class="day-status">Tidak Tersedia</span>
+                            </div>
+                        @else
+                            <div class="day-cell cell-tersedia">
+                                <span class="day-number">{{ $day }}</span>
+                                <span class="day-status">Tersedia</span>
+                            </div>
+                        @endif
+                    @endfor
                 </div>
             </div>
 
@@ -166,7 +181,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; 2026 Sistem Penyewaan Aula POLMAN Babel. Semua hak cipta dilindungi.
+                &copy; {{ date('Y') }} Sistem Penyewaan Aula POLMAN Babel. Semua hak cipta dilindungi.
             </div>
         </div>
     </footer>

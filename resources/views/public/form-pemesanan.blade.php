@@ -6,6 +6,15 @@
     <title>Form Pemesanan Aula - POLMAN BABEL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/form.css') }}?v={{ time() }}">
+    <style>
+        /* Style tambahan untuk menandai fasilitas yang tidak tersedia */
+        .facility-box.disabled-box {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+    </style>
 </head>
 <body class="booking-body">
 
@@ -18,13 +27,28 @@
             </div>
         </div>
         <ul class="nav-links">
-            <li><a href="#" class="active">Beranda</a></li>
-            <li><a href="#">Detail Aula</a></li>
-            <li><a href="#">Jadwal</a></li>
-            <li><a href="#">Kritik & Saran</a></li>
+            <li><a href="{{ route('home') }}">Beranda</a></li>
+            <li><a href="{{ route('detail.aula') }}">Detail Aula</a></li>
+            <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
+            <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
         </ul>
         <div class="nav-auth">
-            <a href="#" class="btn-logout">Log Out</a>
+            @auth
+                <span class="user-name" style="margin-right: 15px; color: #333; font-weight: 600;">
+                    <i class="fa-solid fa-user-circle"></i> {{ Auth::user()->name }}
+                </span>
+                
+                <a href="{{ route('logout') }}" class="btn-logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="text-decoration: none; padding: 8px 16px; background-color: #e11d48; color: white; border-radius: 6px; font-weight: 600; transition: background-color 0.3s;">
+                    Keluar
+                </a>
+                
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="btn-login" style="text-decoration: none; margin-right: 10px;">Masuk</a>
+                <a href="{{ route('register') }}" class="btn-register" style="text-decoration: none;">Daftar</a>
+            @endauth
         </div>
     </nav>
 
@@ -32,16 +56,6 @@
         <div class="hero-inner">
             <h2>Form Pemesanan Aula</h2>
             <p>Lengkapi data di bawah ini untuk melakukan pemesanan Aula POLMAN Babel</p>
-            
-            <div class="stepper">
-                <div class="step active">1</div>
-                <div class="line"></div>
-                <div class="step">2</div>
-                <div class="line"></div>
-                <div class="step">3</div>
-                <div class="line"></div>
-                <div class="step">4</div>
-            </div>
         </div>
     </div>
 
@@ -57,7 +71,7 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="nama">Nama Lengkap <span class="required">*</span></label>
-                        <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+                        <input type="text" id="nama" name="nama" value="{{ Auth::check() ? Auth::user()->name : '' }}" placeholder="Masukkan nama lengkap" required>
                     </div>
                     <div class="form-group">
                         <label for="instansi">Instansi/Perusahaan</label>
@@ -65,11 +79,11 @@
                     </div>
                     <div class="form-group">
                         <label for="telp">No. Telepon/WhatsApp <span class="required">*</span></label>
-                        <input type="tel" id="telp" name="telp" placeholder="08xxxxxxxxxx" required>
+                        <input type="tel" id="telp" name="telp" value="{{ Auth::check() ? Auth::user()->phone : '' }}" placeholder="08xxxxxxxxxx" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" placeholder="nama@gmail.com" required>
+                        <input type="email" id="email" name="email" value="{{ Auth::check() ? Auth::user()->email : '' }}" placeholder="nama@gmail.com" required readonly>
                     </div>
                 </div>
             </div>
@@ -99,12 +113,12 @@
                         <input type="text" id="jenis_acara" name="jenis_acara" placeholder="Contoh: Seminar, Rapat, Pernikahan" required>
                     </div>
                     <div class="form-group full-width">
-                        <label for="jumlah_peserta">Jumlah Peserta</label>
-                        <select id="jumlah_peserta" name="jumlah_peserta">
+                        <label for="jumlah_peserta">Jumlah Peserta <span class="required">*</span></label>
+                        <select id="jumlah_peserta" name="jumlah_peserta" required>
                             <option value="" disabled selected>Pilih jumlah peserta</option>
-                            <option value="< 100">&lt; 100 Orang</option>
-                            <option value="100 - 300">100 - 300 Orang</option>
-                            <option value="300 - 500">300 - 500 Orang</option>
+                            <option value="100">Kurang dari 100 Orang</option>
+                            <option value="300">100 - 300 Orang</option>
+                            <option value="500">300 - 500 Orang</option>
                         </select>
                     </div>
                 </div>
@@ -116,41 +130,46 @@
                     <h3>3. Fasilitas Tambahan (Opsional)</h3>
                 </div>
                 <div class="checkbox-grid">
-                    <label class="facility-box">
-                        <input type="checkbox" name="fasilitas[]" value="Sound System">
-                        <span class="box-text">Sound System</span>
-                    </label>
-                    <label class="facility-box">
-                        <input type="checkbox" name="fasilitas[]" value="Proyektor">
-                        <span class="box-text">Proyektor</span>
-                    </label>
-                    <label class="facility-box">
-                        <input type="checkbox" name="fasilitas[]" value="Proyektor_2">
-                        <span class="box-text">Proyektor</span>
-                    </label>
-                    <label class="facility-box">
-                        <input type="checkbox" name="fasilitas[]" value="Proyektor_3">
-                        <span class="box-text">Proyektor</span>
-                    </label>
-                    <label class="facility-box">
-                        <input type="checkbox" name="fasilitas[]" value="Meja Tambahan">
-                        <span class="box-text">Meja Tambahan</span>
-                    </label>
-                    <label class="facility-box">
-                        <input type="checkbox" name="fasilitas[]" value="Panggung">
-                        <span class="box-text">Panggung</span>
-                    </label>
+                    @if(isset($facilities) && !$facilities->isEmpty())
+                        @foreach($facilities as $facility)
+                            <label class="facility-box {{ $facility->status === 'Tidak Tersedia' ? 'disabled-box' : '' }}">
+                                <input type="checkbox" name="fasilitas[]" value="{{ $facility->nama_fasilitas }}" 
+                                    {{ $facility->status === 'Tidak Tersedia' ? 'disabled' : '' }}>
+                                <span class="box-text">
+                                    {{ $facility->nama_fasilitas }}
+                                    @if($facility->status === 'Tidak Tersedia')
+                                        <small style="color: #ef4444; font-weight: bold; margin-left: 5px;">(Tidak Tersedia)</small>
+                                    @endif
+                                </span>
+                            </label>
+                        @endforeach
+                    @else
+                        <p style="grid-column: 1 / -1; color: #94a3b8; font-size: 0.9rem;">Daftar fasilitas master belum dikonfigurasi.</p>
+                    @endif
                     
-                    <div class="facility-combo-box">
-                        <label class="facility-inner-check">
-                            <input type="checkbox" name="fasilitas[]" value="Parkir Tambahan">
-                            <span>Parkir Tambahan</span>
-                        </label>
+                    <div class="facility-combo-box" style="grid-column: 1 / -1; margin-top: 1rem;">
                         <div class="other-input-row">
                             <label><input type="checkbox" name="fasilitas[]" value="Lainnya"> Lainnya</label>
                             <input type="text" name="fasilitas_lainnya" placeholder="Sebutkan kebutuhan lain">
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="form-section-card">
+                <div class="section-card-header">
+                    <i class="fa-solid fa-box-open icon-title"></i>
+                    <h3>Pilih Paket</h3>
+                </div>
+                <div class="radio-group" style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <label class="package-option">
+                        <input type="radio" name="paket" value="Paket Resepsi" required>
+                        <div class="package-box">Paket Resepsi</div>
+                    </label>
+                    <label class="package-option">
+                        <input type="radio" name="paket" value="Paket Instansi Pendidikan" required>
+                        <div class="package-box">Paket Instansi Pendidikan</div>
+                    </label>
                 </div>
             </div>
 

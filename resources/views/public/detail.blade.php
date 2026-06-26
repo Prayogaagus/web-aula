@@ -26,8 +26,22 @@
                <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
             </ul>
             <div class="nav-auth">
-                <a href="{{ route('login') }}" class="btn-login">Masuk</a>
-                <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+                @auth
+                    <span class="user-name" style="margin-right: 15px; color: #333; font-weight: 600;">
+                        <i class="fa-solid fa-user-circle"></i> {{ Auth::user()->name }}
+                    </span>
+                    
+                    <a href="{{ route('logout') }}" class="btn-register" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                       Keluar
+                    </a>
+                    
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn-login">Masuk</a>
+                    <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+                @endauth
             </div>
         </div>
     </nav>
@@ -143,9 +157,13 @@
                                 <span class="spec-value">Langsung ke Bendahara Polman</span>
                             </div>
                         </div>
-
-                        <a href="#" class="btn-sidebar-check">Cek Ketersediaan</a>
-                        <a href="#" class="btn-sidebar-order">Pesan Aula Ini</a>
+                        
+                        @auth
+                            <a href="{{ route('pemesanan') }}" class="btn-sidebar-order">Pesan Aula Ini</a>
+                        @else
+                            <a href="{{ route('login') }}" class="btn-sidebar-order" onclick="alert('Silakan login terlebih dahulu untuk melakukan pemesanan aula.')">Pesan Aula Ini</a>
+                        @endauth
+                        
                         <span class="sidebar-note">Login diperlukan untuk memesan</span>
                     </div>
                 </div> </div>

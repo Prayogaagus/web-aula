@@ -9,19 +9,34 @@ class Pemesanan extends Model
 {
     use HasFactory;
 
-    // Tambahkan baris ini jika belum ada, masukkan semua field yang di-insert
+    protected $table = 'pemesanan';
+
+    // Daftarkan kolom total dan status agar bisa disimpan (Mass Assignment)
     protected $fillable = [
         'user_id',
+        'paket',
+        'kode_pemesanan',
         'nama',
         'instansi',
         'telp',
-        'email',
         'tanggal',
         'jam_mulai',
         'jam_selesai',
         'jenis_acara',
         'jumlah_peserta',
         'fasilitas',
-        'catatan'
+        'catatan',
+        'total',
+        'status'
     ];
+
+        protected static function booted()
+    {
+        static::created(function ($pemesanan) {
+        });
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -12,20 +12,36 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pemesanan', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained(); // Menghubungkan ke user yang login
-        $table->string('nama');
-        $table->string('instansi')->nullable();
-        $table->string('telp');
-        $table->date('tanggal');
-        $table->time('jam_mulai');
-        $table->time('jam_selesai');
-        $table->string('jenis_acara');
-        $table->integer('jumlah_peserta');
-        $table->text('fasilitas')->nullable();
-        $table->text('catatan')->nullable();
-        $table->timestamps();
-    });
+            $table->id();
+            
+            // Kolom Penting untuk Identifikasi
+            $table->string('kode_pemesanan')->unique(); // Tambahkan unique agar tidak ada kode ganda
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
+            $table->string('paket'); // Ditambahkan untuk menyimpan pilihan paket
+            
+            // Informasi Penyewa
+            $table->string('nama');
+            $table->string('instansi')->nullable();
+            $table->string('telp');
+            
+            // Detail Acara
+            $table->date('tanggal')->index(); // Index ditambahkan untuk mempercepat pencarian jadwal
+            $table->time('jam_mulai');
+            $table->time('jam_selesai');
+            $table->string('jenis_acara');
+            $table->unsignedInteger('jumlah_peserta'); // unsigned agar tidak bisa negatif
+            
+            // Fasilitas & Tambahan
+            $table->text('fasilitas')->nullable();
+            $table->text('catatan')->nullable();
+            
+            // Keuangan & Status
+            $table->decimal('total', 15, 2)->default(0);
+            $table->enum('status', ['Menunggu Konfirmasi', 'Dikonfirmasi', 'Selesai', 'Dibatalkan'])
+                  ->default('Menunggu Konfirmasi');
+                  
+            $table->timestamps();
+        });
     }
 
     /**

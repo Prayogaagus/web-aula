@@ -18,7 +18,8 @@ protected $fillable = [
     'email',
     'password',
     'phone',    // Wajib ditambahkan
-    'address',  // Wajib ditambahkan
+    'address',  
+    'role',// Wajib ditambahkan
 ];
 
     // Gunakan cara standar untuk hidden agar lebih kompatibel
@@ -39,4 +40,9 @@ protected $fillable = [
             'password' => 'hashed',
         ];
     }
+
+    public function notifications()
+        {
+    return $this->hasMany(Notification::class)->orderBy('created_at', 'desc');
+        }   
 }

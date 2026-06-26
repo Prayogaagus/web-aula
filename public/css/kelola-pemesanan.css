@@ -1,0 +1,310 @@
+/* ==========================================================================
+   LAYOUT UTAMA BAR ATAS & FILTER
+   ========================================================================== */
+.filter-wrapper-booking {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px;
+}
+
+/* Kotak Pencarian Pintar */
+.search-input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    max-width: 450px;
+}
+
+.search-input-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    padding: 11px 15px 11px 40px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.search-input-wrapper input:focus {
+    border-color: #0b3a7a;
+    box-shadow: 0 0 0 3px rgba(11, 58, 122, 0.15);
+}
+
+/* ==========================================================================
+   ENGINE UTAMA MODAL POPUP (MENYEMBUNYIKAN & MENAMPILKAN FORM)
+   ========================================================================== */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+/* Class pemicu JavaScript saat tombol klik aktif */
+.modal-backdrop.show {
+    display: flex;
+}
+
+.modal-box {
+    background: #ffffff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(-30px);
+    transition: transform 0.3s ease;
+}
+
+.modal-backdrop.show .modal-box {
+    transform: translateY(0);
+}
+
+.modal-large {
+    max-width: 680px !important;
+}
+
+/* Grid Layout 2 Kolom di Dalam Modal */
+.modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+/* Header, Body, & Footer Modal */
+.modal-header {
+    background-color: #f8fafc;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0b3a7a;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #ef4444;
+}
+
+.modal-body {
+    padding: 24px;
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    background-color: #f8fafc;
+    padding: 14px 24px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* ==========================================================================
+   DESAIN ELEMEN FORM & INPUT
+   ========================================================================== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #1e293b;
+    outline: none;
+    transition: border-color 0.2s;
+    background-color: #fff;
+}
+
+.form-control:focus {
+    border-color: #0b3a7a;
+    box-shadow: 0 0 0 3px rgba(11, 58, 122, 0.1);
+}
+
+.style-textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+/* ==========================================================================
+   KUSTOMISASI TOMBOL ACTION & BADGES
+   ========================================================================== */
+.btn-tambah {
+    background-color: #fca311;
+    color: #fff;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-tambah:hover {
+    background-color: #e59209;
+}
+
+.btn-primary {
+    background-color: #0b3a7a;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary:hover { background-color: #082c5d; }
+
+.btn-secondary {
+    background-color: #e2e8f0;
+    color: #475569;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-secondary:hover { background-color: #cbd5e1; }
+
+/* Tampilan Baris Tabel */
+.text-primary-dark { color: #0b3a7a; }
+.text-orange { color: #fca311; }
+.text-muted { color: #777; font-size: 12px; }
+
+.badge-acara {
+    background-color: #e6effa;
+    color: #0b3a7a;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Potong deskripsi kepanjangan di tabel */
+.text-truncate-custom {
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    color: #444;
+}
+
+/* Notifikasi Alert Sistem */
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border-left: 5px solid #198754;
+    font-weight: 500;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border-left: 5px solid #dc3545;
+}
+
+/* Pagination Control */
+.page-nav {
+    display: flex;
+    gap: 5px;
+}
+.page-link-btn {
+    padding: 6px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    color: #0b3a7a;
+    text-decoration: none;
+}
+.page-link-btn.active {
+    background-color: #0b3a7a;
+    color: #fff;
+    border-color: #0b3a7a;
+}
+.page-link-btn.disabled {
+    color: #cbd5e1;
+    cursor: not-allowed;
+    border-color: #f1f5f9;
+}
+
+.status-badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .status-menunggu { background-color: #fff3cd; color: #856404; }
+        .status-dikonfirmasi { background-color: #d4edda; color: #155724; }
+        .status-selesai { background-color: #cce5ff; color: #004085; }
+        .status-dibatalkan { background-color: #f8d7da; color: #721c24; }
+        
+        .detail-box-preview {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+            white-space: pre-line;
+        }

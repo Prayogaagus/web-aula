@@ -1,0 +1,43 @@
+/* Styling tambahan untuk elemen yang tidak tercover Tailwind */
+
+/* Membuat tabel lebih rapi */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+thead tr {
+    background-color: #f3f4f6;
+}
+
+/* Hover effect pada baris tabel */
+tbody tr:hover {
+    background-color: #f9fafb;
+    transition: background 0.2s ease;
+}
+
+/* Memastikan input pencarian dan select terlihat konsisten */
+input:focus, select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    ring: 2px solid #3b82f6;
+}
+
+/* Styling untuk Modal */
+/* Kelas .hidden sudah ada di Tailwind, tapi kita tambahkan transisi */
+#modal-tambah {
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(2px);
+}
+
+/* Kustomisasi scrollbar jika tabel terlalu panjang */
+.overflow-hidden {
+    overflow-x: auto;
+}
+
+/* Responsive adjustment untuk tombol Aksi */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Sederhanakan navigasi di mobile */
+    }
+}

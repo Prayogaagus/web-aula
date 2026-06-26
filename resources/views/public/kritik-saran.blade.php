@@ -18,13 +18,28 @@
             </div>
         </div>
         <ul class="nav-links">
-            <li><a href="#">Beranda</a></li>
-            <li><a href="#">Detail Aula</a></li>
-            <li><a href="#">Jadwal</a></li>
-            <li><a href="#" class="active">Kritik & Saran</a></li>
+            <li><a href="{{ route('home') }}">Beranda</a></li>
+            <li><a href="{{ route('detail.aula') }}">Detail Aula</a></li>
+            <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
+            <li><a href="{{ route('kritik') }}" class="active">Kritik & Saran</a></li>
         </ul>
         <div class="nav-auth">
-            <a href="#" class="btn-logout">Log Out</a>
+            @auth
+                <span class="user-name" style="margin-right: 15px; font-weight: 600; color: #333;">
+                    <i class="fa-solid fa-user-circle"></i> {{ Auth::user()->name }}
+                </span>
+                
+                <a href="{{ route('logout') }}" class="btn-logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                   Keluar
+                </a>
+                
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="btn-login">Masuk</a>
+                <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+            @endauth
         </div>
     </nav>
 
@@ -37,7 +52,13 @@
     </div>
 
     <div class="feedback-container">
-        <form action="#" method="POST">
+        @if(session('success'))
+            <div class="alert-success">
+                <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+            </div>
+        @endif
+
+        <form action="{{ route('kritik.store') }}" method="POST">
             @csrf
 
             <div class="form-section-title">
@@ -49,7 +70,7 @@
                 <div class="input-grid-2">
                     <div class="form-group">
                         <label>Nama Lengkap <span class="required">*</span></label>
-                        <input type="text" name="nama_lengkap" placeholder="Masukkan nama lengkap" required>
+                        <input type="text" name="nama_lengkap" value="{{ Auth::check() ? Auth::user()->name : '' }}" placeholder="Masukkan nama lengkap" readonly required>
                     </div>
                     <div class="form-group">
                         <label>Instansi/Perusahaan (Opsional)</label>
@@ -59,11 +80,11 @@
                 <div class="input-grid-2 mt-3">
                     <div class="form-group">
                         <label>No. Telepon/WhatsApp (Opsional)</label>
-                        <input type="text" name="no_telepon" placeholder="08xxxxxxxxxx">
+                        <input type="text" name="no_telepon" value="{{ Auth::check() ? Auth::user()->phone : '' }}" placeholder="08xxxxxxxxxx">
                     </div>
                     <div class="form-group">
                         <label>Email <span class="required">*</span></label>
-                        <input type="email" name="email" placeholder="nama@gmail.com" required>
+                        <input type="email" name="email" value="{{ Auth::check() ? Auth::user()->email : '' }}" placeholder="nama@gmail.com" readonly required>
                     </div>
                 </div>
             </div>
@@ -90,26 +111,6 @@
                         <i class="fa-solid fa-lightbulb icon-saran"></i>
                         <h3>Saran</h3>
                         <p>Berikan ide atau saran untuk kami.</p>
-                        <span class="custom-radio"></span>
-                    </div>
-                </label>
-
-                <label class="category-card">
-                    <input type="radio" name="jenis_masukan" value="Apresiasi">
-                    <div class="card-content">
-                        <i class="fa-solid fa-thumbs-up icon-apresiasi"></i>
-                        <h3>Apresiasi</h3>
-                        <p>Sampaikan pengalaman positif Anda.</p>
-                        <span class="custom-radio"></span>
-                    </div>
-                </label>
-
-                <label class="category-card">
-                    <input type="radio" name="jenis_masukan" value="Lainnya">
-                    <div class="card-content">
-                        <i class="fa-solid fa-ellipsis icon-lainnya"></i>
-                        <h3>Lainnya</h3>
-                        <p>Masukan lainnya.</p>
                         <span class="custom-radio"></span>
                     </div>
                 </label>
@@ -152,10 +153,50 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-submit-feedback">Kirim Masukan</button>
+            @auth
+                <button type="submit" class="btn-submit-feedback">Kirim Masukan</button>
+            @else
+                <button type="button" class="btn-submit-feedback" onclick="alert('Silakan login terlebih dahulu untuk dapat mengirim kritik dan saran.')" style="background-color: #64748b;">Kirim Masukan (Harus Login)</button>
+            @endauth
 
         </form>
     </div>
+
+    <section class="testimonials-section">
+        <h2 class="section-title-center">Apa Kata Mereka?</h2>
+        
+        @if(isset($feedbacks) && !$feedbacks->isEmpty())
+            <div class="testimonials-grid">
+                @foreach($feedbacks as $item)
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="avatar-circle" style="background-color: #f59e0b;">
+                                {{ strtoupper(substr($item->user->name ?? 'U', 0, 2)) }}
+                            </div>
+                            <div class="user-info">
+                                <h4>{{ $item->user->name ?? 'User' }}</h4>
+                                <span>{{ $item->created_at->format('d M Y') }}</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-stars">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $item->rating)
+                                    <i class="fa-solid fa-star"></i>
+                                @else
+                                    <i class="fa-regular fa-star"></i>
+                                @endif
+                            @endfor
+                        </div>
+                        <p class="testimonial-text">
+                            <strong>[{{ $item->jenis }}]</strong> {{ $item->pesan }}
+                        </p>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p style="text-align: center; color: #94a3b8; font-size: 0.95rem; margin-bottom: 3rem;">Belum ada kritik atau saran yang masuk.</p>
+        @endif
+    </section>
 
     <footer class="global-footer">
         <div class="footer-container">
@@ -170,10 +211,10 @@
                 <div>
                     <h5>Tautan</h5>
                     <ul>
-                        <li><a href="#">Beranda</a></li>
-                        <li><a href="#">Detail Aula</a></li>
-                        <li><a href="#">Jadwal</a></li>
-                        <li><a href="#">Kritik & Saran</a></li>
+                        <li><a href="{{ route('home') }}">Beranda</a></li>
+                        <li><a href="{{ route('detail.aula') }}">Detail Aula</a></li>
+                        <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
+                        <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
                     </ul>
                 </div>
                 <div>

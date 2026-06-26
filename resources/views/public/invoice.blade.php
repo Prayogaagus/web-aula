@@ -18,13 +18,26 @@
             </div>
         </div>
         <ul class="nav-links">
-            <li><a href="#" class="active">Beranda</a></li>
-            <li><a href="#">Detail Aula</a></li>
-            <li><a href="#">Jadwal</a></li>
-            <li><a href="#">Kritik & Saran</a></li>
+            <li><a href="{{ route('home') }}">Beranda</a></li>
+            <li><a href="{{ route('detail.aula') }}">Detail Aula</a></li>
+            <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
+            <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
         </ul>
         <div class="nav-auth">
-            <a href="#" class="btn-logout">Log Out</a>
+            @auth
+                <span class="user-name" style="margin-right: 15px; color: #333; font-weight: 600;">
+                    <i class="fa-solid fa-user-circle"></i> {{ Auth::user()->name }}
+                </span>
+                <a href="{{ route('logout') }}" class="btn-logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="text-decoration: none; padding: 8px 16px; background-color: #e11d48; color: white; border-radius: 6px; font-weight: 600;">
+                    Keluar
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="btn-login" style="text-decoration: none; margin-right: 10px;">Masuk</a>
+                <a href="{{ route('register') }}" class="btn-register" style="text-decoration: none;">Daftar</a>
+            @endauth
         </div>
     </nav>
 
@@ -44,11 +57,11 @@
                 <table class="meta-table">
                     <tr>
                         <td>Kode Invoice</td>
-                        <td>: INV/KLIEN/001</td>
+                        <td>: {{ $pemesanan->kode_pemesanan }}</td>
                     </tr>
                     <tr>
                         <td>Tanggal</td>
-                        <td>: 1 Juni 2026</td>
+                        <td>: {{ $pemesanan->created_at->format('d M Y') }}</td>
                     </tr>
                 </table>
             </div>
@@ -62,19 +75,19 @@
                 <table class="info-table">
                     <tr>
                         <td class="label">Nama</td>
-                        <td class="value">Ahmad Danis</td>
+                        <td class="value">{{ $pemesanan->nama }}</td>
                     </tr>
                     <tr>
                         <td class="label">Instansi</td>
-                        <td class="value">PT. Maju Terus</td>
+                        <td class="value">{{ $pemesanan->instansi ?? '-' }}</td>
                     </tr>
                     <tr>
                         <td class="label">No. Telepon</td>
-                        <td class="value">0812-3421-6296</td>
+                        <td class="value">{{ $pemesanan->telp }}</td>
                     </tr>
                     <tr>
                         <td class="label">Email</td>
-                        <td class="value">ahmad@gmail.com</td>
+                        <td class="value">{{ $pemesanan->user->email ?? '-' }}</td>
                     </tr>
                 </table>
             </div>
@@ -84,19 +97,19 @@
                 <table class="info-table">
                     <tr>
                         <td class="label">Tanggal</td>
-                        <td class="value">Minggu, 25 Juni 2026</td>
+                        <td class="value">{{ date('d M Y', strtotime($pemesanan->tanggal)) }}</td>
                     </tr>
                     <tr>
                         <td class="label">Waktu</td>
-                        <td class="value">08.00 - 17.00 WIB</td>
+                        <td class="value">{{ date('H.i', strtotime($pemesanan->jam_mulai)) }} - {{ date('H.i', strtotime($pemesanan->jam_selesai)) }} WIB</td>
                     </tr>
                     <tr>
                         <td class="label">Acara</td>
-                        <td class="value">Resepsi</td>
+                        <td class="value">{{ $pemesanan->jenis_acara }}</td>
                     </tr>
                     <tr>
                         <td class="label">Jumlah Peserta</td>
-                        <td class="value">150 orang</td>
+                        <td class="value">{{ $pemesanan->jumlah_peserta }} Orang</td>
                     </tr>
                 </table>
             </div>
@@ -109,7 +122,7 @@
                     <thead>
                         <tr>
                             <th style="width: 8%">No</th>
-                            <th>Deskripsi</th>
+                            <th>Deskripsi Item Layanan</th>
                             <th style="width: 12%">Jumlah</th>
                             <th style="width: 22%">Harga Satuan</th>
                             <th style="width: 22%">Subtotal</th>
@@ -118,32 +131,24 @@
                     <tbody>
                         <tr>
                             <td class="center">1</td>
-                            <td>Sewa gedung Aula</td>
+                            <td>Sewa gedung Aula Serbaguna (Base Ruangan)</td>
                             <td class="center">1</td>
-                            <td>Rp 8.950.000</td>
-                            <td>Rp 8.950.000</td>
+                            <td>Rp {{ number_format($pemesanan->total, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($pemesanan->total, 0, ',', '.') }}</td>
                         </tr>
-                        <tr>
-                            <td class="center">2</td>
-                            <td>Sound System</td>
-                            <td class="center">1</td>
-                            <td>Rp 300.000</td>
-                            <td>Rp 300.000</td>
-                        </tr>
-                        <tr>
-                            <td class="center">3</td>
-                            <td>Proyektor</td>
-                            <td class="center">1</td>
-                            <td>Rp 200.000</td>
-                            <td>Rp 200.000</td>
-                        </tr>
-                        <tr>
-                            <td class="center">4</td>
-                            <td>Kursi Tambahan</td>
-                            <td class="center">50</td>
-                            <td>Rp 5.000</td>
-                            <td>Rp 250.000</td>
-                        </tr>
+                        
+                        @php $no = 2; @endphp
+                        @foreach($splitFasilitas as $fasilitasNama)
+                            @if(!empty($fasilitasNama))
+                            <tr>
+                                <td class="center">{{ $no++ }}</td>
+                                <td>Fasilitas Tambahan: {{ $fasilitasNama }}</td>
+                                <td class="center">1</td>
+                                <td>Termasuk</td>
+                                <td>Rp 0</td>
+                            </tr>
+                            @endif
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -151,7 +156,7 @@
             <div class="summary-calculation-box">
                 <div class="calc-row">
                     <span>Subtotal</span>
-                    <span class="calc-val">Rp 9.700.000</span>
+                    <span class="calc-val">Rp {{ number_format($pemesanan->total, 0, ',', '.') }}</span>
                 </div>
                 <div class="calc-row">
                     <span>Biaya Layanan</span>
@@ -159,22 +164,35 @@
                 </div>
                 <div class="calc-total-row">
                     <span>Total Pembayaran</span>
-                    <span class="total-val">Rp 9.700.000</span>
+                    <span class="total-val">Rp {{ number_format($pemesanan->total, 0, ',', '.') }}</span>
                 </div>
             </div>
         </div>
 
         <div class="footer-note-grid">
             <div class="catatan-box">
-                <h4>Catatan</h4>
+                <h4>Catatan Penting</h4>
                 <ul>
-                    <li>Pembayaran harus dilakukan sebelum batas waktu yang ditentukan</li>
-                    <li>Invoice ini berlaku sebagai bukti pemesanan yang sah</li>
+                    <li>Status Pemesanan Anda saat ini adalah: <strong>{{ $pemesanan->status }}</strong></li>
+                    <li>Pembayaran harus dilakukan sebelum batas waktu yang ditentukan admin.</li>
+                    <li>Invoice ini berlaku sebagai bukti pendaftaran pesanan sistem yang sah.</li>
                 </ul>
             </div>
             
             <div class="signature-box">
-                <p class="greeting">Hormat kami,</p>
+                <p class="greeting">Konfirmasi Pembayaran di Bawah ini:</p>
+    
+    @php
+        // Nomor WA Admin (Ganti sesuai nomor admin POLMAN Babel Anda, awali dengan kode negara 62)
+        $nomorWA = '628123456789'; 
+        
+        // Pesan otomatis yang akan dikirim oleh user ke WA Admin
+        $pesanWA = rawurlencode("Halo Admin Aula POLMAN Babel, saya ingin mengonfirmasi pemesanan aula dengan Kode Invoice: " . $pemesanan->kode_pemesanan . ". Berikut rincian data atas nama " . $pemesanan->nama . ".");
+    @endphp
+    
+    <a href="https://wa.me/{{ $nomorWA }}?text={{ $pesanWA }}" target="_blank" class="btn-whatsapp-invoice">
+        <i class="fa-brands fa-whatsapp"></i> Hubungi via WhatsApp
+    </a>
                 <p class="sign-title">Admin Aula Polman Babel</p>
             </div>
         </div>
@@ -194,10 +212,10 @@
                 <div>
                     <h5>Tautan</h5>
                     <ul>
-                        <li><a href="#">Beranda</a></li>
-                        <li><a href="#">Detail Aula</a></li>
-                        <li><a href="#">Jadwal</a></li>
-                        <li><a href="#">Kritik & Saran</a></li>
+                        <li><a href="{{ route('home') }}">Beranda</a></li>
+                        <li><a href="{{ route('detail.aula') }}">Detail Aula</a></li>
+                        <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
+                        <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
                     </ul>
                 </div>
                 <div>

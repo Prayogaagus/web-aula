@@ -23,11 +23,25 @@
                 <li><a href="{{ route('home') }}">Beranda</a></li>
                 <li><a href="{{ route('detail.aula') }}">Detail Aula</a></li>
                 <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
-                <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>
+                <li><a href="{{ route('kritik') }}" class="active">Kritik & Saran</a></li>
             </ul>
             <div class="nav-auth">
-                <a href="{{ route('login') }}" class="btn-login">Masuk</a>
-                <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+                @auth
+                    <span class="user-name" style="margin-right: 15px; color: #333; font-weight: 600;">
+                        <i class="fa-solid fa-user-circle"></i> {{ Auth::user()->name }}
+                    </span>
+                    
+                    <a href="{{ route('logout') }}" class="btn-register" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                       Keluar
+                    </a>
+                    
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn-login">Masuk</a>
+                    <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+                @endauth
             </div>
         </div>
     </nav>

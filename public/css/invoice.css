@@ -39,6 +39,59 @@ body.invoice-body {
     flex-direction: column;
 }
 
+/* Style Tombol WhatsApp di Invoice */
+.signature-box {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.signature-box .greeting {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+}
+
+.btn-whatsapp-invoice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #25d366;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 6px -1px rgba(37, 211, 102, 0.2);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-whatsapp-invoice:hover {
+    background-color: #1cbd55;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-whatsapp-invoice i {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .signature-box {
+        align-items: center;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    .btn-whatsapp-invoice {
+        width: 100%;
+        justify-content: center;
+    }
+}
 .main-brand {
     font-weight: 700;
     font-size: 0.95rem;
