@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pemesanan;
 use App\Models\Facility; 
+use App\Models\Notification; // 1. IMPORT MODEL NOTIFIKASI DI SINI
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -19,93 +20,105 @@ class PemesananController extends Controller
     }
 
     public function store(Request $request) 
-{
-    $request->validate([
-        'paket'          => 'required|in:Paket Resepsi,Paket Instansi Pendidikan',
-        'nama'           => 'required|string|max:255',
-        'instansi'       => 'nullable|string|max:255',
-        'telp'           => 'required|string|max:255',
-        'tanggal'        => 'required|date',
-        'jam_mulai'      => 'required',
-        'jam_selesai'    => 'required',
-        'jenis_acara'    => 'required|string|max:255',
-        'jumlah_peserta' => 'required|integer|min:1',
-        'catatan'        => 'nullable|string',
-    ]);
-
-    $kodeUnik = 'AULA' . date('Ymd') . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
-
-    $pemesanan = DB::transaction(function () use ($request, $kodeUnik) {
-        
-        // 1. Tentukan Harga Dasar Paket Pilihan
-        $hargaPaket = ($request->paket === 'Paket Resepsi') ? 8950000 : 4500000;
-        $totalBiayaFasilitas = 0;
-        $arrFasilitasNama = [];
-
-        // 2. Hitung Fasilitas Tambahan Sesuai Kuantitas Pilihan User
-        if ($request->has('fasilitas')) {
-            foreach ($request->fasilitas as $item) {
-                if (isset($item['id']) && isset($item['jumlah']) && $item['jumlah'] > 0) {
-                    $facility = Facility::find($item['id']);
-                    // Validasi pengaman stok dari sisi server
-                    if ($facility && $facility->jumlah >= $item['jumlah']) {
-                        $totalBiayaFasilitas += $facility->harga * $item['jumlah'];
-                        $arrFasilitasNama[] = $facility->nama_fasilitas . ' (' . $item['jumlah'] . ')';
-                    }
-                }
-            }
-        }
-
-        // Tambahkan text fasilitas kustom "Lainnya" jika diisi
-        if ($request->filled('fasilitas_lainnya')) {
-            $arrFasilitasNama[] = 'Kebutuhan Khusus: ' . $request->fasilitas_lainnya;
-        }
-
-        $totalAkhir = $hargaPaket + $totalBiayaFasilitas;
-        $textFasilitas = implode(', ', $arrFasilitasNama);
-
-        // 3. Masukkan Data ke SQL Tabel Pemesanan Utama
-        $newPemesanan = Pemesanan::create([
-            'user_id'         => Auth::id(),
-            'paket'           => $request->paket,
-            'kode_pemesanan'  => $kodeUnik,
-            'nama'            => $request->nama,
-            'instansi'        => $request->instansi,
-            'telp'            => $request->telp,
-            'tanggal'         => $request->tanggal,
-            'jam_mulai'       => $request->jam_mulai,
-            'jam_selesai'     => $request->jam_selesai,
-            'jenis_acara'     => $request->jenis_acara,
-            'jumlah_peserta'  => $request->jumlah_peserta,
-            'fasilitas'       => $textFasilitas ?: null,
-            'catatan'         => $request->catatan,
-            'total'           => $totalAkhir, 
-            'status'          => 'Menunggu Konfirmasi',
+    {
+        $request->validate([
+            'paket'          => 'required|in:Paket Resepsi,Paket Instansi Pendidikan',
+            'nama'           => 'required|string|max:255',
+            'instansi'       => 'nullable|string|max:255',
+            'telp'           => 'required|string|max:255',
+            'tanggal'        => 'required|date',
+            'jam_mulai'      => 'required',
+            'jam_selesai'    => 'required',
+            'jenis_acara'    => 'required|string|max:255',
+            'jumlah_peserta' => 'required|integer|min:1',
+            'catatan'        => 'nullable|string',
         ]);
 
-        // 4. Potong Stok Gudang & Hubungkan Relasi Banyak-ke-Banyak (Pivot)
-        if ($request->has('fasilitas')) {
-            foreach ($request->fasilitas as $item) {
-                if (!isset($item['id']) || !isset($item['jumlah']) || $item['jumlah'] <= 0) continue;
+        $kodeUnik = 'AULA' . date('Ymd') . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
 
-                $facility = Facility::find($item['id']);
-                if ($facility && $facility->jumlah >= $item['jumlah']) {
-                    $facility->jumlah -= $item['jumlah'];
-                    if ($facility->jumlah < 1) {
-                        $facility->status = 'Tidak Tersedia';
+        $pemesanan = DB::transaction(function () use ($request, $kodeUnik) {
+            
+            // 1. Tentukan Harga Dasar Paket Pilihan
+            $hargaPaket = ($request->paket === 'Paket Resepsi') ? 8950000 : 4500000;
+            $totalBiayaFasilitas = 0;
+            $arrFasilitasNama = [];
+
+            // 2. Hitung Fasilitas Tambahan Sesuai Kuantitas Pilihan User
+            if ($request->has('fasilitas')) {
+                foreach ($request->fasilitas as $item) {
+                    if (isset($item['id']) && isset($item['jumlah']) && $item['jumlah'] > 0) {
+                        $facility = Facility::find($item['id']);
+                        // Validasi pengaman stok dari sisi server
+                        if ($facility && $facility->jumlah >= $item['jumlah']) {
+                            $totalBiayaFasilitas += $facility->harga * $item['jumlah'];
+                            $arrFasilitasNama[] = $facility->nama_fasilitas . ' (' . $item['jumlah'] . ')';
+                        }
                     }
-                    $facility->save();
-
-                    $newPemesanan->facilities()->attach($facility->id, ['jumlah_digunakan' => $item['jumlah']]);
                 }
             }
-        }
 
-        return $newPemesanan;
-    });
+            // Tambahkan text fasilitas kustom "Lainnya" jika diisi
+            if ($request->filled('fasilitas_lainnya')) {
+                $arrFasilitasNama[] = 'Kebutuhan Khusus: ' . $request->fasilitas_lainnya;
+            }
 
-    return redirect()->route('invoice', ['kode' => $pemesanan->kode_pemesanan])->with('success', 'Pemesanan berhasil diajukan!');
-}
+            $totalAkhir = $hargaPaket + $totalBiayaFasilitas;
+            $textFasilitas = implode(', ', $arrFasilitasNama);
+
+            // 3. Masukkan Data ke SQL Tabel Pemesanan Utama
+            $newPemesanan = Pemesanan::create([
+                'user_id'         => Auth::id(),
+                'paket'           => $request->paket,
+                'kode_pemesanan'  => $kodeUnik,
+                'nama'            => $request->nama,
+                'instansi'        => $request->instansi,
+                'telp'            => $request->telp,
+                'tanggal'         => $request->tanggal,
+                'jam_mulai'       => $request->jam_mulai,
+                'jam_selesai'     => $request->jam_selesai,
+                'jenis_acara'     => $request->jenis_acara,
+                'jumlah_peserta'  => $request->jumlah_peserta,
+                'fasilitas'       => $textFasilitas ?: null,
+                'catatan'         => $request->catatan,
+                'total'           => $totalAkhir, 
+                'status'          => 'Menunggu Konfirmasi',
+            ]);
+
+            // 4. Potong Stok Gudang & Hubungkan Relasi Banyak-ke-Banyak (Pivot)
+            if ($request->has('fasilitas')) {
+                foreach ($request->fasilitas as $item) {
+                    if (!isset($item['id']) || !isset($item['jumlah']) || $item['jumlah'] <= 0) continue;
+
+                    $facility = Facility::find($item['id']);
+                    if ($facility && $facility->jumlah >= $item['jumlah']) {
+                        $facility->jumlah -= $item['jumlah'];
+                        if ($facility->jumlah < 1) {
+                            $facility->status = 'Tidak Tersedia';
+                        }
+                        $facility->save();
+
+                        $newPemesanan->facilities()->attach($facility->id, ['jumlah_digunakan' => $item['jumlah']]);
+                    }
+                }
+            }
+
+            // 5. OTOMATIS TAMBAHKAN DATA NOTIFIKASI UNTUK USER YANG MEMESAN
+            Notification::create([
+                'user_id'   => Auth::id(),
+                'judul'     => 'Pengajuan Pesanan Berhasil',
+                'pesan'     => 'Pesanan Anda dengan kode ' . $kodeUnik . ' telah diajukan. Silakan lakukan pembayaran dan tunggu konfirmasi admin.',
+                'tipe'      => 'pembayaran_tertunda',
+                'kategori'  => 'Pesanan',
+                'is_read'   => false,
+                'url'       => route('invoice', ['kode' => $kodeUnik]), // 🔥 DIUBAH DI SINI
+            ]);
+
+            return $newPemesanan;
+        });
+
+        // Pastikan nama route invoice disesuaikan dengan web.php Anda (di sini menggunakan 'invoice')
+        return redirect()->route('invoice', ['kode' => $pemesanan->kode_pemesanan])->with('success', 'Pemesanan berhasil diajukan!');
+    }
 
     public function showInvoice($kode)
     {

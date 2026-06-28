@@ -6,35 +6,6 @@
     <title>Form Pemesanan Aula - POLMAN BABEL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/form.css') }}?v={{ time() }}">
-    <style>
-        .facility-box.disabled-box {
-            background-color: #f1f5f9;
-            border-color: #cbd5e1;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        /* Style tambahan untuk input jumlah */
-        .qty-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed #e2e8f0;
-        }
-        .qty-input {
-            width: 70px;
-            padding: 4px 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            font-weight: 600;
-            color: #334155;
-        }
-        .qty-input:disabled {
-            background-color: #f1f5f9;
-            color: #94a3b8;
-        }
-    </style>
 </head>
 <body class="booking-body">
 

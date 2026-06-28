@@ -189,6 +189,13 @@
                 </table>
             </div>
 
+            @if($pemesanan->catatan)
+                <h4 style="margin-top: 1.25rem; color: #1e293b;"><i class="fa-solid fa-comment-dots"></i> Catatan Tambahan Anda:</h4>
+                <div style="background-color: #f8fafc; padding: 0.75rem 1rem; border-left: 4px solid #f97316; font-style: italic; color: #475569; border-radius: 0 6px 6px 0; font-size: 0.9rem; margin-top: 0.25rem;">
+                    {{ $pemesanan->catatan }}
+                </div>
+                @endif
+
             <div class="summary-calculation-box">
                 <div class="calc-row">
                     <span>Subtotal</span>
@@ -213,13 +220,6 @@
                     <li>Pembayaran harus dilakukan sebelum batas waktu yang ditentukan admin.</li>
                     <li>Invoice ini berlaku sebagai bukti pendaftaran pesanan sistem yang sah.</li>
                 </ul>
-
-                @if($pemesanan->catatan)
-                <h4 style="margin-top: 1.25rem; color: #1e293b;"><i class="fa-solid fa-comment-dots"></i> Catatan Tambahan Anda:</h4>
-                <div style="background-color: #f8fafc; padding: 0.75rem 1rem; border-left: 4px solid #f97316; font-style: italic; color: #475569; border-radius: 0 6px 6px 0; font-size: 0.9rem; margin-top: 0.25rem;">
-                    {{ $pemesanan->catatan }}
-                </div>
-                @endif
             </div>
             
             <div class="signature-box">

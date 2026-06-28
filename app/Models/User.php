@@ -12,17 +12,15 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    // PINDAHKAN INI KE DALAM CLASS
-protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'phone',    // Wajib ditambahkan
-    'address',  
-    'role',// Wajib ditambahkan
-];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'phone',    
+        'address',  
+        'role',
+    ];
 
-    // Gunakan cara standar untuk hidden agar lebih kompatibel
     protected $hidden = [
         'password',
         'remember_token',
@@ -41,8 +39,9 @@ protected $fillable = [
         ];
     }
 
-    public function notifications()
-        {
-    return $this->hasMany(Notification::class)->orderBy('created_at', 'desc');
-        }   
+    // PASTIKAN NAMA FUNGSI INI SUDAH BERUBAH DAN BERADA DI DALAM CLASS USER
+    public function customNotifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id')->orderBy('created_at', 'desc');
+    }   
 }

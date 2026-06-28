@@ -111,15 +111,38 @@
                         <td>
                             <div class="action-btns">
                                 <button type="button" class="btn-action view" title="Lihat Catatan & Fasilitas"
-                                        onclick="openDetailModal('{{ addslashes($booking->nama) }}', '{{ addslashes($booking->jenis_acara) }}', '{{ addslashes($booking->fasilitas) }}', '{{ addslashes($booking->catatan) }}')">
+                                        onclick="openDetailModal(this)"
+                                        data-nama="{{ $booking->nama }}"
+                                        data-jenis-acara="{{ $booking->jenis_acara }}"
+                                        data-fasilitas="{{ $booking->fasilitas }}"
+                                        data-catatan="{{ $booking->catatan }}">
                                     <i class="fa-solid fa-eye"></i>
                                 </button>
+                                
                                 <button type="button" class="btn-action edit" title="Edit Data" 
-                                        onclick="openEditModal('{{ $booking->id }}', '{{ $booking->user_id }}', '{{ addslashes($booking->nama) }}', '{{ addslashes($booking->instansi) }}', '{{ addslashes($booking->telp) }}', '{{ $booking->tanggal }}', '{{ $booking->jam_mulai }}', '{{ $booking->jam_selesai }}', '{{ addslashes($booking->jenis_acara) }}', '{{ $booking->jumlah_peserta }}', '{{ $booking->total }}', '{{ $booking->status }}', '{{ addslashes($booking->fasilitas) }}', '{{ addslashes($booking->catatan) }}')">
+                                        onclick="openEditModal(this)"
+                                        data-id="{{ $booking->id }}"
+                                        data-user-id="{{ $booking->user_id }}"
+                                        data-paket="{{ $booking->paket }}"
+                                        data-nama="{{ $booking->nama }}"
+                                        data-instansi="{{ $booking->instansi }}"
+                                        data-telp="{{ $booking->telp }}"
+                                        data-tanggal="{{ $booking->tanggal }}"
+                                        data-jam-mulai="{{ $booking->jam_mulai }}"
+                                        data-jam-selesai="{{ $booking->jam_selesai }}"
+                                        data-jenis-acara="{{ $booking->jenis_acara }}"
+                                        data-jumlah-peserta="{{ $booking->jumlah_peserta }}"
+                                        data-total="{{ $booking->total }}"
+                                        data-status="{{ $booking->status }}"
+                                        data-catatan="{{ $booking->catatan }}"
+                                        data-facilities="{{ json_encode($booking->facilities) }}">
                                     <i class="fa-solid fa-pencil"></i>
                                 </button>
+                                
                                 <button type="button" class="btn-action delete" title="Hapus" 
-                                        onclick="confirmDelete('{{ $booking->id }}', '{{ addslashes($booking->nama) }}')">
+                                        onclick="confirmDelete(this)"
+                                        data-id="{{ $booking->id }}"
+                                        data-nama="{{ $booking->nama }}">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
@@ -136,9 +159,9 @@
             <div class="pagination-wrapper">
                 <div>Menampilkan {{ $pemesanans->firstItem() ?? 0 }} - {{ $pemesanans->lastItem() ?? 0 }} dari {{ $pemesanans->total() }} pemesanan</div>
                 <div class="page-nav">
-                    @if ($pemesanans->onFirstPage()) <span class="page-link-btn disabled"><</span> @else <a href="{{ $pemesanans->previousPageUrl() }}" class="page-link-btn"><</a> @endif
+                    @if ($pemesanans->onFirstPage()) <span class="page-link-btn disabled">&lt;</span> @else <a href="{{ $pemesanans->previousPageUrl() }}" class="page-link-btn">&lt;</a> @endif
                     @foreach ($pemesanans->getUrlRange(1, $pemesanans->lastPage()) as $page => $url) <a href="{{ $url }}" class="page-link-btn {{ $page == $pemesanans->currentPage() ? 'active' : '' }}">{{ $page }}</a> @endforeach
-                    @if ($pemesanans->hasMorePages()) <a href="{{ $pemesanans->nextPageUrl() }}" class="page-link-btn">></a> @else <span class="page-link-btn disabled">></span> @endif
+                    @if ($pemesanans->hasMorePages()) <a href="{{ $pemesanans->nextPageUrl() }}" class="page-link-btn">&gt;</a> @else <span class="page-link-btn disabled">&gt;</span> @endif
                 </div>
             </div>
         </div>
@@ -179,8 +202,37 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label>Pilihan Paket</label>
+                        <select name="paket" class="form-control" required>
+                            <option value="">-- Pilih Paket --</option>
+                            <option value="Paket Resepsi">Paket Resepsi</option>
+                            <option value="Paket Instansi Pendidikan">Paket Instansi Pendidikan</option>
+                        </select>
+                    </div>
+
                     <div class="form-group full-width"><label>Jenis / Nama Acara</label><input type="text" name="jenis_acara" class="form-control" placeholder="Contoh: Seminar Nasional, Pernikahan" required></div>
-                    <div class="form-group full-width"><label>Fasilitas Tambahan</label><textarea name="fasilitas" class="form-control style-textarea" placeholder="Kursi tambahan, sound system, proyektor..."></textarea></div>
+                    <div class="form-group full-width">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Fasilitas & Jumlah</label>
+                        <div class="facilities-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; max-height: 200px; overflow-y: auto;">
+                            @foreach($facilities as $index => $facility)
+                                @php $isOutOfStock = $facility->jumlah <= 0; @endphp
+                                <div class="facility-row" style="display: flex; align-items: center; gap: 8px; background: #f9f9f9; padding: 5px; border-radius: 4px; {{ $isOutOfStock ? 'opacity: 0.6;' : '' }}">
+                                    <input type="hidden" name="fasilitas[{{ $index }}][id]" value="{{ $facility->id }}">
+                                    
+                                    <input type="checkbox" name="fasilitas[{{ $index }}][selected]" value="1" class="facility-checkbox" {{ $isOutOfStock ? 'disabled' : '' }}>
+                                    
+                                    <span style="flex-grow: 1; font-size: 13px;">
+                                        {{ $facility->nama_fasilitas }}
+                                        @if($isOutOfStock) <strong style="color: #dc2626;">(Habis)</strong> @endif
+                                    </span>
+                                    
+                                    <input type="number" name="fasilitas[{{ $index }}][jumlah]" value="{{ $isOutOfStock ? 0 : 1 }}" min="{{ $isOutOfStock ? 0 : 1 }}" max="{{ $facility->jumlah }}" class="form-control facility-amount" style="width: 60px; height: 30px; padding: 2px;" disabled>
+                                </div>
+                            @endforeach
+                        </div>
+                        <small class="text-muted">Centang fasilitas yang ingin disewa dan masukkan jumlahnya.</small>
+                    </div>
                     <div class="form-group full-width"><label>Catatan Khusus</label><textarea name="catatan" class="form-control style-textarea" placeholder="Catatan tambahan mengenai alur acara..."></textarea></div>
                 </div>
                 <div class="modal-footer">
@@ -226,8 +278,37 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label>Pilihan Paket</label>
+                        <select name="paket" id="edit_paket" class="form-control" required>
+                            <option value="">-- Pilih Paket --</option>
+                            <option value="Paket Resepsi">Paket Resepsi</option>
+                            <option value="Paket Instansi Pendidikan">Paket Instansi Pendidikan</option>
+                        </select>
+                    </div>
+
                     <div class="form-group full-width"><label>Jenis / Nama Acara</label><input type="text" name="jenis_acara" id="edit_jenis_acara" class="form-control" required></div>
-                    <div class="form-group full-width"><label>Fasilitas Tambahan</label><textarea name="fasilitas" id="edit_fasilitas" class="form-control style-textarea"></textarea></div>
+                    <div class="form-group full-width">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Fasilitas & Jumlah</label>
+                        <div class="facilities-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; max-height: 200px; overflow-y: auto;">
+                            @foreach($facilities as $index => $facility)
+                                @php $isOutOfStock = $facility->jumlah <= 0; @endphp
+                                <div class="facility-row" data-id="{{ $facility->id }}" style="display: flex; align-items: center; gap: 8px; background: #f9f9f9; padding: 5px; border-radius: 4px; {{ $isOutOfStock ? 'opacity: 0.6;' : '' }}">
+                                    <input type="hidden" name="fasilitas[{{ $index }}][id]" value="{{ $facility->id }}">
+                                    
+                                    <input type="checkbox" name="fasilitas[{{ $index }}][selected]" value="1" class="edit-facility-checkbox" {{ $isOutOfStock ? 'disabled' : '' }}>
+                                    
+                                    <span style="flex-grow: 1; font-size: 13px;">
+                                        {{ $facility->nama_fasilitas }}
+                                        @if($isOutOfStock) <strong style="color: #dc2626;">(Habis)</strong> @endif
+                                    </span>
+                                    
+                                    <input type="number" name="fasilitas[{{ $index }}][jumlah]" value="{{ $isOutOfStock ? 0 : 1 }}" min="{{ $isOutOfStock ? 0 : 1 }}" max="{{ $facility->jumlah }}" data-global-stock="{{ $facility->jumlah }}" class="form-control edit-facility-amount" style="width: 60px; height: 30px; padding: 2px;" disabled>
+                                </div>
+                            @endforeach
+                        </div>
+                        <small class="text-muted">Centang fasilitas yang ingin disewa dan masukkan jumlahnya.</small>
+                    </div>
                     <div class="form-group full-width"><label>Catatan Khusus</label><textarea name="catatan" id="edit_catatan" class="form-control style-textarea"></textarea></div>
                 </div>
                 <div class="modal-footer">
@@ -276,20 +357,42 @@
             else modal.classList.remove('show');
         }
 
-        // Fungsi menampilkan isi teks Catatan & Fasilitas secara utuh ke dalam modal popup
-        function openDetailModal(nama, acara, fasilitas, catatan) {
+        function openDetailModal(button) {
+            const nama = button.getAttribute('data-nama');
+            const acara = button.getAttribute('data-jenis-acara');
+            const fasilitas = button.getAttribute('data-fasilitas');
+            const catatan = button.getAttribute('data-catatan');
+
             document.getElementById('view_nama_penyewa').innerText = nama;
             document.getElementById('view_nama_acara').innerText = acara;
-            document.getElementById('view_detail_fasilitas').innerText = (fasilitas === 'null' || fasilitas === '') ? 'Tidak ada fasilitas tambahan.' : fasilitas;
-            document.getElementById('view_detail_catatan').innerText = (catatan === 'null' || catatan === '') ? 'Tidak ada catatan khusus.' : catatan;
+            document.getElementById('view_detail_fasilitas').innerText = (fasilitas === 'null' || !fasilitas) ? 'Tidak ada fasilitas tambahan.' : fasilitas;
+            document.getElementById('view_detail_catatan').innerText = (catatan === 'null' || !catatan) ? 'Tidak ada catatan khusus.' : catatan;
             
             toggleModal('modalDetailBooking', true);
         }
 
-        function openEditModal(id, userId, nama, instansi, telp, tanggal, jamMulai, jamSelesai, jenisAcara, peserta, total, status, fasilitas, catatan) {
+        function openEditModal(button) {
+            const id = button.getAttribute('data-id');
+            const userId = button.getAttribute('data-user-id');
+            const paket = button.getAttribute('data-paket');
+            const nama = button.getAttribute('data-nama');
+            const instansi = button.getAttribute('data-instansi');
+            const telp = button.getAttribute('data-telp');
+            const tanggal = button.getAttribute('data-tanggal');
+            const jamMulai = button.getAttribute('data-jam-mulai');   
+            const jamSelesai = button.getAttribute('data-jam-selesai'); 
+            const jenisAcara = button.getAttribute('data-jenis-acara');
+            const peserta = button.getAttribute('data-jumlah-peserta');
+            const total = button.getAttribute('data-total');
+            const status = button.getAttribute('data-status');
+            const catatan = button.getAttribute('data-catatan');
+            const facilitiesJson = button.getAttribute('data-facilities');
+
+            // 1. Isi input dasar
             document.getElementById('edit_user_id').value = userId;
+            document.getElementById('edit_paket').value = paket;
             document.getElementById('edit_nama').value = nama;
-            document.getElementById('edit_instansi').value = instansi === 'null' ? '' : instansi;
+            document.getElementById('edit_instansi').value = (instansi === 'null' || !instansi ? '' : instansi);
             document.getElementById('edit_telp').value = telp;
             document.getElementById('edit_tanggal').value = tanggal;
             document.getElementById('edit_jam_mulai').value = jamMulai;
@@ -297,21 +400,114 @@
             document.getElementById('edit_jenis_acara').value = jenisAcara;
             document.getElementById('edit_jumlah_peserta').value = peserta;
             document.getElementById('edit_total').value = total;
-            document.getElementById('edit_status').value = status; // Mapping data status ke dropdown select edit modal
-            document.getElementById('edit_fasilitas').value = fasilitas === 'null' ? '' : fasilitas;
-            document.getElementById('edit_catatan').value = catatan === 'null' ? '' : catatan;
+            document.getElementById('edit_status').value = status;
+            document.getElementById('edit_catatan').value = (catatan === 'null' || !catatan ? '' : catatan);
 
+            // 2. Reset semua keadaan modal edit ke default global stock
+            const rows = document.querySelectorAll('#modalEditBooking .facility-row');
+            rows.forEach(row => {
+                const cb = row.querySelector('.edit-facility-checkbox');
+                const num = row.querySelector('.edit-facility-amount');
+                const globalStock = parseInt(num.getAttribute('data-global-stock')) || 0;
+
+                if (cb) {
+                    cb.checked = false;
+                    cb.disabled = (globalStock <= 0);
+                }
+                if (num) {
+                    num.value = (globalStock > 0 ? 1 : 0);
+                    num.min = (globalStock > 0 ? 1 : 0);
+                    num.max = globalStock;
+                    num.disabled = true; // Tetap nonaktif sebelum dicentang
+                }
+            });
+
+            // 3. Rekalkulasi Atribut Validasi berdasarkan data pesanan lama
+            if (facilitiesJson) {
+                try {
+                    const fasilitasData = JSON.parse(facilitiesJson);
+                    
+                    fasilitasData.forEach(f => {
+                        const row = document.querySelector(`#modalEditBooking .facility-row[data-id="${f.id}"]`);
+                        if (row) {
+                            const checkbox = row.querySelector('.edit-facility-checkbox');
+                            const numInput = row.querySelector('.edit-facility-amount');
+                            const globalStock = parseInt(numInput.getAttribute('data-global-stock')) || 0;
+                            
+                            // Logika Krusial: Max yang diperbolehkan = Sisa stok di gudang + Stok yang sudah dipakai order ini
+                            const maxBisaDipinjam = globalStock + f.pivot.jumlah_digunakan;
+
+                            if (checkbox) {
+                                checkbox.disabled = false;
+                                checkbox.checked = true;
+                            }
+                            if (numInput) {
+                                numInput.disabled = false;
+                                numInput.min = 1; // Karena sedang terpakai, batas bawah kembali jadi 1
+                                numInput.max = maxBisaDipinjam;
+                                numInput.value = f.pivot.jumlah_digunakan;
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error("Gagal memproses data fasilitas:", e);
+                }
+            }
+
+            // 4. Perbarui Form Action & Buka Modal
             document.getElementById('formEditBooking').action = `/admin/pemesanan/${id}`;
             toggleModal('modalEditBooking', true);
         }
 
-        function confirmDelete(id, name) {
+        function confirmDelete(button) {
+            const id = button.getAttribute('data-id');
+            const name = button.getAttribute('data-nama');
+            
             if (confirm(`Apakah Anda yakin ingin menghapus data pemesanan atas nama "${name}"?`)) {
                 const deleteForm = document.getElementById('formDeleteBooking');
                 deleteForm.action = `/admin/pemesanan/${id}`;
                 deleteForm.submit();
             }
         }
+
+        // SINKRONISASI REALTIME ANTARA CHECKBOX & INPUT ANGKA
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logika Sinkronisasi Modal Tambah
+            const tambahCheckboxes = document.querySelectorAll('.facility-checkbox');
+            tambahCheckboxes.forEach(cb => {
+                const row = cb.closest('.facility-row');
+                const numInput = row.querySelector('.facility-amount');
+                
+                cb.addEventListener('change', function() {
+                    if (this.checked) {
+                        numInput.disabled = false;
+                        numInput.value = 1;
+                    } else {
+                        numInput.disabled = true;
+                    }
+                });
+            });
+
+            // Logika Sinkronisasi Modal Edit
+            const editCheckboxes = document.querySelectorAll('.edit-facility-checkbox');
+            editCheckboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const row = this.closest('.facility-row');
+                    const numInput = row.querySelector('.edit-facility-amount');
+                    if (numInput) {
+                        if (this.checked) {
+                            numInput.disabled = false;
+                            const currentVal = parseInt(numInput.value);
+                            if (isNaN(currentVal) || currentVal <= 0) {
+                                numInput.value = 1;
+                            }
+                        } else {
+                            numInput.disabled = true;
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

@@ -11,8 +11,8 @@ class NotificationController extends Controller
         // Ambil filter kategori dari tab menu (?kategori=Pesanan)
         $filterKategori = $request->get('kategori', 'Semua');
 
-        // Mengambil notifikasi HANYA milik user yang sedang login saat ini
-        $query = auth()->user()->notifications();
+        // UBAH BARIS INI: Panggil fungsi relasi baru yang tidak bentrok
+        $query = auth()->user()->customNotifications();
 
         if ($filterKategori !== 'Semua') {
             $query->where('kategori', $filterKategori);

@@ -47,7 +47,7 @@
 
                 <div class="form-group">
                     <label for="telepon">Nomor Telepon/WhatsApp</label>
-                    <input type="text" id="telepon" name="phone" placeholder="08123456  7890" required>
+                    <input type="text" id="telepon" name="phone" placeholder="081234567890" required>
                 </div>
 
                 <div class="form-group">

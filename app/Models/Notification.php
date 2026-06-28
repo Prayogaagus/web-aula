@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     use HasFactory;
-
-    // Added 'url' to fillable so you can save the link
     protected $fillable = [
         'user_id', 
         'judul', 
@@ -20,7 +18,6 @@ class Notification extends Model
         'url'
     ];
 
-    // Good practice: cast is_read to a boolean
     protected $casts = [
         'is_read' => 'boolean',
     ];
