@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // ==========================================================================
         
         // Akun Admin Utama
-        $admin = User::updateOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@polman-babel.ac.id'],
             [
                 'name' => 'Admin Utama',
@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
 
 
         // ==========================================================================
-        // 2. SEED DATA FASILITAS (Tabel: facilities)
+        // 2. SEED DATA FASILITAS + KOLOM HARGA BARU (Tabel: facilities)
         // ==========================================================================
         
         Facility::updateOrCreate(
@@ -63,6 +63,7 @@ class DatabaseSeeder extends Seeder
             [
                 'kategori' => 'Peralatan Audio',
                 'jumlah' => 2,
+                'harga' => 500000, // Rp 500.000 / unit
                 'status' => 'Tersedia'
             ]
         );
@@ -72,6 +73,7 @@ class DatabaseSeeder extends Seeder
             [
                 'kategori' => 'Peralatan Presentasi',
                 'jumlah' => 3,
+                'harga' => 300000, // Rp 300.000 / unit
                 'status' => 'Tersedia'
             ]
         );
@@ -81,6 +83,7 @@ class DatabaseSeeder extends Seeder
             [
                 'kategori' => 'Perabot',
                 'jumlah' => 500,
+                'harga' => 5000, // Rp 5.000 / unit
                 'status' => 'Tersedia'
             ]
         );
@@ -90,6 +93,7 @@ class DatabaseSeeder extends Seeder
             [
                 'kategori' => 'Peralatan Pendukung',
                 'jumlah' => 6,
+                'harga' => 250000, // Rp 250.000 / unit
                 'status' => 'Tersedia'
             ]
         );
@@ -99,6 +103,7 @@ class DatabaseSeeder extends Seeder
             [
                 'kategori' => 'Peralatan Audio',
                 'jumlah' => 4,
+                'harga' => 100000, // Rp 100.000 / unit
                 'status' => 'Tersedia'
             ]
         );
@@ -109,11 +114,13 @@ class DatabaseSeeder extends Seeder
         // ==========================================================================
         
         // Transaksi 1: Danis Ahmad (Selesai)
+        // Perhitungan: Paket Resepsi (8.950.000) + Sound (1x500.000) + Kursi (400x5.000 = 2.000.000) = 11.450.000
         Pemesanan::updateOrCreate(
-            ['user_id' => $userDanis->id, 'tanggal' => '2026-05-05'],
+            ['kode_pemesanan' => 'AULA202605001'],
             [
-                'paket'          => 'Paket Resepsi', // <--- DITAMBAHKAN
-                'kode_pemesanan' => 'AULA202605001',
+                'user_id'        => $userDanis->id, 
+                'tanggal'        => '2026-05-05',
+                'paket'          => 'Paket Resepsi',
                 'nama'           => 'Danis Ahmad',
                 'instansi'       => 'Pribadi',
                 'telp'           => '08123456788',
@@ -121,19 +128,21 @@ class DatabaseSeeder extends Seeder
                 'jam_selesai'    => '17:00:00',
                 'jenis_acara'    => 'Acara Pernikahan',
                 'jumlah_peserta' => 500,
-                'fasilitas'      => 'Sound System, Kursi 400, Panggung',
+                'fasilitas'      => 'Sound System Standard (1), Kursi Futura (400)',
                 'catatan'        => 'Harap siapkan kebersihan gedung H-1.',
-                'total'          => 3500000,
+                'total'          => 11450000, 
                 'status'         => 'Selesai',
             ]
         );
 
         // Transaksi 2: Gibran Raka (Dikonfirmasi)
+        // Perhitungan: Paket Pendidikan (4.500.000) + Proyektor (1x300.000) + Sound (1x500.000) = 5.300.000
         Pemesanan::updateOrCreate(
-            ['user_id' => $userGibran->id, 'tanggal' => '2026-05-20'],
+            ['kode_pemesanan' => 'AULA202605002'],
             [
-                'paket'          => 'Paket Instansi Pendidikan', // <--- DITAMBAHKAN
-                'kode_pemesanan' => 'AULA202605002',
+                'user_id'        => $userGibran->id, 
+                'tanggal'        => '2026-05-20',
+                'paket'          => 'Paket Instansi Pendidikan',
                 'nama'           => 'Gibran Raka',
                 'instansi'       => 'Himpunan Mahasiswa',
                 'telp'           => '08234567891',
@@ -141,19 +150,21 @@ class DatabaseSeeder extends Seeder
                 'jam_selesai'    => '12:00:00',
                 'jenis_acara'    => 'Seminar Nasional',
                 'jumlah_peserta' => 200,
-                'fasilitas'      => 'Proyektor, Sound System, AC',
+                'fasilitas'      => 'Proyektor HD 4K (1), Sound System Standard (1)',
                 'catatan'        => 'Memerlukan gladi bersih pada jam 07:00 pagi.',
-                'total'          => 1500000,
+                'total'          => 5300000, 
                 'status'         => 'Dikonfirmasi',
             ]
         );
 
         // Transaksi Tambahan 3: Mengisi Grafik Juni (Dikonfirmasi)
+        // Perhitungan: Paket Pendidikan (4.500.000) + AC (4x250.000 = 1.000.000) + Proyektor (1x300.000) = 5.800.000
         Pemesanan::updateOrCreate(
-            ['user_id' => $userDanis->id, 'tanggal' => '2026-06-10'],
+            ['kode_pemesanan' => 'AULA202606001'],
             [
-                'paket'          => 'Paket Instansi Pendidikan', // <--- DITAMBAHKAN
-                'kode_pemesanan' => 'AULA202606001',
+                'user_id'        => $userDanis->id, 
+                'tanggal'        => '2026-06-10',
+                'paket'          => 'Paket Instansi Pendidikan',
                 'nama'           => 'Danis Ahmad',
                 'instansi'       => 'PT Maju Mundur',
                 'telp'           => '08123456788',
@@ -161,19 +172,21 @@ class DatabaseSeeder extends Seeder
                 'jam_selesai'    => '15:00:00',
                 'jenis_acara'    => 'Corporate Gathering',
                 'jumlah_peserta' => 150,
-                'fasilitas'      => 'Full AC, Sound System, Proyektor',
+                'fasilitas'      => 'AC Portable 2 PK (4), Proyektor HD 4K (1)',
                 'catatan'        => 'Layout kursi berformat teater.',
-                'total'          => 2500000,
+                'total'          => 5800000, 
                 'status'         => 'Dikonfirmasi',
             ]
         );
 
         // Transaksi Tambahan 4: Mengisi Grafik Juni (Menunggu Konfirmasi)
+        // Perhitungan: Paket Resepsi (8.950.000) + Sound (1x500.000) = 9.450.000
         Pemesanan::updateOrCreate(
-            ['user_id' => $userGibran->id, 'tanggal' => '2026-06-25'],
+            ['kode_pemesanan' => 'AULA202606002'],
             [
-                'paket'          => 'Paket Resepsi', // <--- DITAMBAHKAN
-                'kode_pemesanan' => 'AULA202606002',
+                'user_id'        => $userGibran->id, 
+                'tanggal'        => '2026-06-25',
+                'paket'          => 'Paket Resepsi',
                 'nama'           => 'Gibran Raka',
                 'instansi'       => 'Pribadi',
                 'telp'           => '08234567891',
@@ -181,9 +194,9 @@ class DatabaseSeeder extends Seeder
                 'jam_selesai'    => '21:00:00',
                 'jenis_acara'    => 'Acara Ulang Tahun',
                 'jumlah_peserta' => 100,
-                'fasilitas'      => 'Sound System Standard',
+                'fasilitas'      => 'Sound System Standard (1)',
                 'catatan'        => 'Akan membawa katering luar.',
-                'total'          => 1200000,
+                'total'          => 9450000, 
                 'status'         => 'Menunggu Konfirmasi',
             ]
         );
@@ -198,7 +211,7 @@ class DatabaseSeeder extends Seeder
             [
                 'user_id' => $userDanis->id,
                 'jenis'   => 'Kritik',
-                'rating'  => 3, // Menambahkan kolom rating wajib
+                'rating'  => 3, 
                 'status'  => 'Belum Ditindaklanjuti',
             ]
         );
@@ -208,7 +221,7 @@ class DatabaseSeeder extends Seeder
             [
                 'user_id' => $userGibran->id,
                 'jenis'   => 'Saran',
-                'rating'  => 5, // Menambahkan kolom rating wajib
+                'rating'  => 5, 
                 'status'  => 'Belum Ditindaklanjuti',
             ]
         );
@@ -218,7 +231,7 @@ class DatabaseSeeder extends Seeder
             [
                 'user_id' => $userDanis->id,
                 'jenis'   => 'Kritik',
-                'rating'  => 4, // Menambahkan kolom rating wajib
+                'rating'  => 4, 
                 'status'  => 'Ditindaklanjuti',
             ]
         );

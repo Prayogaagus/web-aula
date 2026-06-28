@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('facilities', function (Blueprint $blueprint) {
             $blueprint->id();
             $blueprint->string('nama_fasilitas');
-            $blueprint->string('kategori'); // Peralatan Presentasi, Audio, Perabot, dll.
+            $blueprint->string('kategori'); 
+            $blueprint->unsignedInteger('harga')->default(0);
             $blueprint->integer('jumlah')->default(0);
             $blueprint->enum('status', ['Tersedia', 'Tidak Tersedia'])->default('Tersedia');
             $blueprint->timestamps();

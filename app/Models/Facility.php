@@ -10,6 +10,7 @@ class Facility extends Model
     protected $fillable = [
         'nama_fasilitas', 
         'kategori', 
+        'harga',
         'jumlah',
         'status' // Sesuaikan dengan kolom yang ada di database Anda
     ];

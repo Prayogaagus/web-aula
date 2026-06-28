@@ -439,6 +439,36 @@ a {
     justify-content: flex-end;
 }
 
+.table-pagination svg {
+    width: 16px !important;
+    height: 16px !important;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.table-pagination nav div:first-child {
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.table-pagination nav [role="navigation"] {
+    display: block !important;
+}
+
+.table-pagination flex, 
+.table-pagination .flex {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.table-pagination span[aria-current="page"] span {
+    background-color: #1e3a8a !important;
+    color: white !important;
+    border-color: #1e3a8a !important;
+}
+
 /* Footer Section */
 .footer {
     background-color: #0b1b33;

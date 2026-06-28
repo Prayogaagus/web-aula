@@ -87,7 +87,7 @@ style="background-image: linear-gradient(rgba(11,58,122,0.85), rgba(11,58,122,0.
                         <th class="px-6 py-3.5 text-center w-16">No</th>
                         <th class="px-6 py-3.5">Nama Fasilitas</th>
                         <th class="px-6 py-3.5">Kategori</th>
-                        <th class="px-6 py-3.5">Jumlah</th>
+                        <th class="px-6 py-3.5">Harga Sewa</th> <th class="px-6 py-3.5">Jumlah</th>
                         <th class="px-6 py-3.5">Kondisi</th>
                         <th class="px-6 py-3.5 text-center w-32">Aksi</th>
                     </tr>
@@ -98,6 +98,11 @@ style="background-image: linear-gradient(rgba(11,58,122,0.85), rgba(11,58,122,0.
                         <td class="px-6 py-4 text-center font-medium text-gray-500">{{ $index + 1 }}</td>
                         <td class="px-6 py-4 font-semibold text-gray-800">{{ $facility->nama_fasilitas }}</td>
                         <td class="px-6 py-4 text-gray-500">{{ $facility->kategori }}</td>
+                        
+                        <td class="px-6 py-4 font-medium text-gray-950">
+                            Rp {{ number_format($facility->harga, 0, ',', '.') }}
+                        </td>
+                        
                         <td class="px-6 py-4">{{ $facility->jumlah }} Unit</td>
                         <td class="px-6 py-4">
                             <span class="px-2.5 py-1 text-xs font-bold rounded-full {{ $facility->status == 'Tersedia' ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50' }}">
@@ -105,7 +110,7 @@ style="background-image: linear-gradient(rgba(11,58,122,0.85), rgba(11,58,122,0.
                             </span>
                         </td>
                         <td class="px-6 py-4 text-center flex justify-center items-center gap-2">
-                            <button onclick="openEditModal('{{ $facility->id }}', '{{ addslashes($facility->nama_fasilitas) }}', '{{ $facility->kategori }}', '{{ $facility->jumlah }}', '{{ $facility->status }}')" class="text-amber-500 hover:bg-amber-50 p-1.5 rounded-lg border border-gray-200 shadow-sm">
+                            <button onclick="openEditModal('{{ $facility->id }}', '{{ addslashes($facility->nama_fasilitas) }}', '{{ $facility->kategori }}', '{{ $facility->jumlah }}', '{{ $facility->harga }}', '{{ $facility->status }}')" class="text-amber-500 hover:bg-amber-50 p-1.5 rounded-lg border border-gray-200 shadow-sm">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                             </button>
                             
@@ -120,7 +125,7 @@ style="background-image: linear-gradient(rgba(11,58,122,0.85), rgba(11,58,122,0.
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-10 text-center text-gray-400">Belum ada data fasilitas yang tercatat.</td>
+                        <td colspan="7" class="px-6 py-10 text-center text-gray-400">Belum ada data fasilitas yang tercatat.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -148,6 +153,12 @@ style="background-image: linear-gradient(rgba(11,58,122,0.85), rgba(11,58,122,0.
                         <option>Perabot</option>
                     </select>
                 </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Harga Sewa Satuan (Rp)</label>
+                    <input type="number" name="harga" min="0" required placeholder="Contoh: 50000" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1">Jumlah Unit</label>
                     <input type="number" name="jumlah" min="0" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
@@ -181,6 +192,12 @@ style="background-image: linear-gradient(rgba(11,58,122,0.85), rgba(11,58,122,0.
                         <option value="Perabot">Perabot</option>
                     </select>
                 </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Harga Sewa Satuan (Rp)</label>
+                    <input type="number" id="edit-harga" name="harga" min="0" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1">Jumlah Unit</label>
                     <input type="number" id="edit-jumlah" name="jumlah" min="0" required class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
@@ -202,25 +219,22 @@ style="background-image: linear-gradient(rgba(11,58,122,0.85), rgba(11,58,122,0.
 </div>
 
 <script>
-    // Fungsi Toggle Umum
     function toggleModal(id) {
         const modal = document.getElementById(id);
         modal.classList.toggle('hidden');
     }
 
-    // Fungsi Pengisian Data Otomatis ke Form Edit
-    function openEditModal(id, nama, kategori, jumlah, status) {
-        // Mengubah action form tujuan agar mengarah ke ID data yang benar
+    // UPDATE JAVASCRIPT AGAR BISA MEMBACA & MEMETAKAN VARIABEL HARGA BARU
+    function openEditModal(id, nama, kategori, jumlah, harga, status) {
         const form = document.getElementById('form-edit');
         form.action = `/admin/fasilitas/${id}`;
 
-        // Mengisi nilai input modal edit berdasarkan baris tabel yang diklik
         document.getElementById('edit-nama').value = nama;
         document.getElementById('edit-kategori').value = kategori;
         document.getElementById('edit-jumlah').value = jumlah;
+        document.getElementById('edit-harga').value = harga;
         document.getElementById('edit-status').value = status;
 
-        // Tampilkan modal edit
         toggleModal('modal-edit');
     }
 </script>

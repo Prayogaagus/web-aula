@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('fasilitas', function (Blueprint $blueprint) {
             $blueprint->id();
-            // Asumsi nama tabel pemesanan Anda adalah 'pemesanans' atau 'pemesanan'
             $blueprint->foreignId('pemesanan_id')->constrained('pemesanan')->onDelete('cascade');
             $blueprint->foreignId('facility_id')->constrained('facilities')->onDelete('cascade');
             $blueprint->integer('jumlah_digunakan')->default(1);

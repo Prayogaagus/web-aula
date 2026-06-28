@@ -134,9 +134,9 @@
                         <tr>
                             <td>{{ $item->kode_pemesanan }}</td> <!-- Sesuaikan nama kolom -->
                             <td>{{ $item->user->name ?? 'User' }}</td> 
-                            <td>{{ date('d F Y', strtotime($item->tanggal_acara)) }}</td>
-                            <td>{{ $item->nama_acara }}</td>
-                            <td>Rp {{ number_format($item->total_bayar, 0, ',', '.') }}</td>
+                            <td>{{ date('d F Y', strtotime($item->tanggal)) }}</td>
+                            <td>{{ $item->jenis_acara }}</td>
+                            <td>Rp {{ number_format($item->total, 0, ',', '.') }}</td>
                             <td>
                                 <span class="status status-{{ $item->status }}">
                                     {{ ucfirst($item->status) }}

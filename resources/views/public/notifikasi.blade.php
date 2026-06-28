@@ -22,7 +22,7 @@
                 </div>
             </div>
             <ul class="nav-menu">
-                <li><a href="#">Beranda</a></li>
+                <li><a href="{{ route('home') }}">Beranda</a></li>
                 <li><a href="{{ route('detail.aula') }}">Detail Aula</a></li>
                 <li><a href="{{ route('jadwal') }}">Jadwal</a></li>
                 <li><a href="{{ route('kritik') }}">Kritik & Saran</a></li>

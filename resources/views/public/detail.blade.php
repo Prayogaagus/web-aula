@@ -87,7 +87,7 @@
                                 <i class="fa-solid fa-chair"></i>
                                 <div class="facility-text-wrapper">
                                     <span class="facility-text-name">Kursi Plastik</span>
-                                    <span class="facility-text-qty">250 Buah</span>
+                                    <span class="facility-text-qty">500 Buah</span>
                                 </div>
                             </div>
                             <div class="facility-detail-item">
@@ -106,7 +106,7 @@
                                 <i class="fa-solid fa-chair"></i>
                                 <div class="facility-text-wrapper">
                                     <span class="facility-text-name">Kursi Plastik</span>
-                                    <span class="facility-text-qty">250 Buah</span>
+                                    <span class="facility-text-qty">500 Buah</span>
                                 </div>
                             </div>
                             <div class="facility-detail-item">
@@ -146,7 +146,7 @@
                         <div class="spec-list">
                             <div class="spec-item">
                                 <span class="spec-label">Kapasitas</span>
-                                <span class="spec-value">250 Kursi</span>
+                                <span class="spec-value">500+ Kursi</span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Tersedia</span>
@@ -159,6 +159,8 @@
                         </div>
                         
                         @auth
+                            <a href="{{ route('notifikasi.index') }}" class="btn-sidebar-order1">Cek Notifikasi</a>
+                            <br>
                             <a href="{{ route('pemesanan') }}" class="btn-sidebar-order">Pesan Aula Ini</a>
                         @else
                             <a href="{{ route('login') }}" class="btn-sidebar-order" onclick="alert('Silakan login terlebih dahulu untuk melakukan pemesanan aula.')">Pesan Aula Ini</a>

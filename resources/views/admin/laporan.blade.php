@@ -277,8 +277,8 @@
                             grid: { color: '#f1f5f9' },
                             ticks: {
                                 callback: function(value) {
-                                    if (value >= 1000000) return (value / 1000000) + 'M';
-                                    if (value >= 1000) return (value / 1000) + 'k';
+                                    if (value >= 1000000) return (value / 1000000) + ' Jt'; // Mengubah 'M' (Million) menjadi 'Jt' (Juta)
+                                    if (value >= 1000) return (value / 1000) + ' Rb';       // Mengubah 'k' (Kilo) menjadi 'Rb' (Ribu)
                                     return value;
                                 },
                                 font: { size: 10, weight: 'bold' }

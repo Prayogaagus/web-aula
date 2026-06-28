@@ -131,22 +131,58 @@
                     <tbody>
                         <tr>
                             <td class="center">1</td>
-                            <td>Sewa gedung Aula Serbaguna (Base Ruangan)</td>
+                            <td>
+                                @if(($pemesanan->paket ?? '') === 'Paket Resepsi')
+                                    <strong>Sewa Ruangan: Paket Resepsi Pernikahan / Umum</strong>
+                                @elseif(($pemesanan->paket ?? '') === 'Paket Instansi Pendidikan')
+                                    <strong>Sewa Ruangan: Paket Instansi Pendidikan & Kampus</strong>
+                                @else
+                                    <strong>Sewa Ruangan: {{ $pemesanan->paket }}</strong>
+                                @endif
+                            </td>
                             <td class="center">1</td>
-                            <td>Rp {{ number_format($pemesanan->total, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($pemesanan->total, 0, ',', '.') }}</td>
+                            @php
+                                $hargaDasarGedung = ($pemesanan->paket === 'Paket Resepsi') ? 8950000 : 4500000;
+                            @endphp
+                            <td>Rp {{ number_format($hargaDasarGedung, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($hargaDasarGedung, 0, ',', '.') }}</td>
                         </tr>
                         
                         @php $no = 2; @endphp
-                        @foreach($splitFasilitas as $fasilitasNama)
-                            @if(!empty($fasilitasNama))
-                            <tr>
-                                <td class="center">{{ $no++ }}</td>
-                                <td>Fasilitas Tambahan: {{ $fasilitasNama }}</td>
-                                <td class="center">1</td>
-                                <td>Termasuk</td>
-                                <td>Rp 0</td>
-                            </tr>
+                        @foreach($splitFasilitas as $item)
+                            @if(!empty($item))
+                                @php
+                                    $namaFasilitas = trim($item);
+                                    $jumlahUnit = 1;
+                                    $hargaSatuan = 0;
+                                    $subtotalFasilitas = 0;
+
+                                    // Membedah teks string "Nama Fasilitas (Jumlah)" menggunakan regex
+                                    if (preg_match('/^(.+)\s\((\d+)\)$/', $item, $matches)) {
+                                        $namaFasilitas = trim($matches[1]);
+                                        $jumlahUnit = (int)$matches[2];
+                                    }
+
+                                    // Mencari harga asli dari database master berdasarkan nama
+                                    $facility = \App\Models\Facility::where('nama_fasilitas', $namaFasilitas)->first();
+                                    if ($facility) {
+                                        $hargaSatuan = $facility->harga;
+                                        $subtotalFasilitas = $hargaSatuan * $jumlahUnit;
+                                    }
+                                @endphp
+                                <tr>
+                                    <td class="center">{{ $no++ }}</td>
+                                    <td>Fasilitas Tambahan: {{ $namaFasilitas }}</td>
+                                    <td class="center">{{ $jumlahUnit }}</td>
+                                    <td>
+                                        @if($hargaSatuan > 0)
+                                            Rp {{ number_format($hargaSatuan, 0, ',', '.') }}
+                                        @else
+                                            Termasuk
+                                        @endif
+                                    </td>
+                                    <td>Rp {{ number_format($subtotalFasilitas, 0, ',', '.') }}</td>
+                                </tr>
                             @endif
                         @endforeach
                     </tbody>
@@ -177,22 +213,26 @@
                     <li>Pembayaran harus dilakukan sebelum batas waktu yang ditentukan admin.</li>
                     <li>Invoice ini berlaku sebagai bukti pendaftaran pesanan sistem yang sah.</li>
                 </ul>
+
+                @if($pemesanan->catatan)
+                <h4 style="margin-top: 1.25rem; color: #1e293b;"><i class="fa-solid fa-comment-dots"></i> Catatan Tambahan Anda:</h4>
+                <div style="background-color: #f8fafc; padding: 0.75rem 1rem; border-left: 4px solid #f97316; font-style: italic; color: #475569; border-radius: 0 6px 6px 0; font-size: 0.9rem; margin-top: 0.25rem;">
+                    {{ $pemesanan->catatan }}
+                </div>
+                @endif
             </div>
             
             <div class="signature-box">
                 <p class="greeting">Konfirmasi Pembayaran di Bawah ini:</p>
-    
-    @php
-        // Nomor WA Admin (Ganti sesuai nomor admin POLMAN Babel Anda, awali dengan kode negara 62)
-        $nomorWA = '628123456789'; 
-        
-        // Pesan otomatis yang akan dikirim oleh user ke WA Admin
-        $pesanWA = rawurlencode("Halo Admin Aula POLMAN Babel, saya ingin mengonfirmasi pemesanan aula dengan Kode Invoice: " . $pemesanan->kode_pemesanan . ". Berikut rincian data atas nama " . $pemesanan->nama . ".");
-    @endphp
-    
-    <a href="https://wa.me/{{ $nomorWA }}?text={{ $pesanWA }}" target="_blank" class="btn-whatsapp-invoice">
-        <i class="fa-brands fa-whatsapp"></i> Hubungi via WhatsApp
-    </a>
+                
+                @php
+                    $nomorWA = '628123456789'; 
+                    $pesanWA = rawurlencode("Halo Admin Aula POLMAN Babel, saya ingin mengonfirmasi pemesanan aula dengan Kode Invoice: " . $pemesanan->kode_pemesanan . ". Berikut rincian data atas nama " . $pemesanan->nama . ".");
+                @endphp
+                
+                <a href="https://wa.me/{{ $nomorWA }}?text={{ $pesanWA }}" target="_blank" class="btn-whatsapp-invoice">
+                    <i class="fa-brands fa-whatsapp"></i> Hubungi via WhatsApp
+                </a>
                 <p class="sign-title">Admin Aula Polman Babel</p>
             </div>
         </div>

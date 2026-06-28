@@ -11,7 +11,7 @@ class Pemesanan extends Model
 
     protected $table = 'pemesanan';
 
-    // Daftarkan kolom total dan status agar bisa disimpan (Mass Assignment)
+    // Daftarkan kolom agar bisa disimpan (Mass Assignment)
     protected $fillable = [
         'user_id',
         'paket',
@@ -30,11 +30,26 @@ class Pemesanan extends Model
         'status'
     ];
 
-        protected static function booted()
+    protected static function booted()
     {
         static::created(function ($pemesanan) {
+            // Tempat logis jika ingin memicu event otomatis saat data baru masuk
         });
     }
+
+    /**
+     * Hubungan Many-to-Many ke Model Facility via tabel pivot pemesanan_fasilitas
+     */
+    public function facilities()
+    {
+        return $this->belongsToMany(Facility::class, 'fasilitas', 'pemesanan_id', 'facility_id')
+                    ->withPivot('jumlah_digunakan') // Mengizinkan sistem membaca kolom kuantitas unit
+                    ->withTimestamps();
+    }
+
+    /**
+     * Hubungan BelongsTo ke data User (Penyewa)
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

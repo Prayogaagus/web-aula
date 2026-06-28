@@ -7,12 +7,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/form.css') }}?v={{ time() }}">
     <style>
-        /* Style tambahan untuk menandai fasilitas yang tidak tersedia */
         .facility-box.disabled-box {
             background-color: #f1f5f9;
             border-color: #cbd5e1;
             cursor: not-allowed;
             opacity: 0.7;
+        }
+        /* Style tambahan untuk input jumlah */
+        .qty-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #e2e8f0;
+        }
+        .qty-input {
+            width: 70px;
+            padding: 4px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #334155;
+        }
+        .qty-input:disabled {
+            background-color: #f1f5f9;
+            color: #94a3b8;
         }
     </style>
 </head>
@@ -37,11 +57,9 @@
                 <span class="user-name" style="margin-right: 15px; color: #333; font-weight: 600;">
                     <i class="fa-solid fa-user-circle"></i> {{ Auth::user()->name }}
                 </span>
-                
-                <a href="{{ route('logout') }}" class="btn-logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="text-decoration: none; padding: 8px 16px; background-color: #e11d48; color: white; border-radius: 6px; font-weight: 600; transition: background-color 0.3s;">
+                <a href="{{ route('logout') }}" class="btn-logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="text-decoration: none; padding: 8px 16px; background-color: #e11d48; color: white; border-radius: 6px; font-weight: 600;">
                     Keluar
                 </a>
-                
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
@@ -96,9 +114,7 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="tanggal">Tanggal Penggunaan <span class="required">*</span></label>
-                        <div class="input-icon-wrapper">
-                            <input type="date" id="tanggal" name="tanggal" required>
-                        </div>
+                        <input type="date" id="tanggal" name="tanggal" required>
                     </div>
                     <div class="form-group">
                         <label for="jam_mulai">Waktu Mulai <span class="required">*</span></label>
@@ -129,19 +145,44 @@
                     <i class="fa-solid fa-heart-pulse icon-title"></i>
                     <h3>3. Fasilitas Tambahan (Opsional)</h3>
                 </div>
-                <div class="checkbox-grid">
+                <div class="checkbox-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
                     @if(isset($facilities) && !$facilities->isEmpty())
-                        @foreach($facilities as $facility)
-                            <label class="facility-box {{ $facility->status === 'Tidak Tersedia' ? 'disabled-box' : '' }}">
-                                <input type="checkbox" name="fasilitas[]" value="{{ $facility->nama_fasilitas }}" 
-                                    {{ $facility->status === 'Tidak Tersedia' ? 'disabled' : '' }}>
-                                <span class="box-text">
-                                    {{ $facility->nama_fasilitas }}
-                                    @if($facility->status === 'Tidak Tersedia')
-                                        <small style="color: #ef4444; font-weight: bold; margin-left: 5px;">(Tidak Tersedia)</small>
-                                    @endif
-                                </span>
-                            </label>
+                        @foreach($facilities as $index => $facility)
+                            <div class="facility-box {{ $facility->status === 'Tidak Tersedia' || $facility->jumlah < 1 ? 'disabled-box' : '' }}" style="border: 1px solid #cbd5e1; padding: 15px; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-weight: 600;">
+                                    <input type="checkbox" 
+                                           name="fasilitas[{{ $index }}][id]" 
+                                           value="{{ $facility->id }}" 
+                                           class="facility-checkbox"
+                                           data-target="qty-{{ $facility->id }}"
+                                           {{ $facility->status === 'Tidak Tersedia' || $facility->jumlah < 1 ? 'disabled' : '' }}
+                                           onchange="toggleQuantity(this)">
+                                    <span class="box-text" style="font-size: 0.95rem; color: #334155;">
+                                        {{ $facility->nama_fasilitas }}
+                                        <div style="font-size: 0.8rem; color: #64748b; font-weight: normal; margin-top: 2px;">
+                                            Harga: Rp {{ number_format($facility->harga, 0, ',', '.') }} | Stok: <strong>{{ $facility->jumlah }}</strong>
+                                        </div>
+                                        @if($facility->status === 'Tidak Tersedia' || $facility->jumlah < 1)
+                                            <small style="color: #ef4444; font-weight: bold; display: block; margin-top: 2px;">(Tidak Tersedia)</small>
+                                        @endif
+                                    </span>
+                                </label>
+
+                                @if($facility->status === 'Tersedia' && $facility->jumlah > 0)
+                                    <div class="qty-wrapper">
+                                        <label style="font-size: 0.85rem; color: #475569;">Jumlah Dibutuhkan:</label>
+                                        <input type="number" 
+                                               id="qty-{{ $facility->id }}" 
+                                               name="fasilitas[{{ $index }}][jumlah]" 
+                                               class="qty-input"
+                                               value="1" 
+                                               min="1" 
+                                               max="{{ $facility->jumlah }}" 
+                                               disabled 
+                                               required>
+                                    </div>
+                                @endif
+                            </div>
                         @endforeach
                     @else
                         <p style="grid-column: 1 / -1; color: #94a3b8; font-size: 0.9rem;">Daftar fasilitas master belum dikonfigurasi.</p>
@@ -149,8 +190,7 @@
                     
                     <div class="facility-combo-box" style="grid-column: 1 / -1; margin-top: 1rem;">
                         <div class="other-input-row">
-                            <label><input type="checkbox" name="fasilitas[]" value="Lainnya"> Lainnya</label>
-                            <input type="text" name="fasilitas_lainnya" placeholder="Sebutkan kebutuhan lain">
+                            <input type="text" name="fasilitas_lainnya" placeholder="Sebutkan kebutuhan lain diluar pilihan diatas (jika ada)" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
                         </div>
                     </div>
                 </div>
@@ -164,11 +204,11 @@
                 <div class="radio-group" style="display: flex; gap: 15px; margin-bottom: 20px;">
                     <label class="package-option">
                         <input type="radio" name="paket" value="Paket Resepsi" required>
-                        <div class="package-box">Paket Resepsi</div>
+                        <div class="package-box">Paket Resepsi (Rp 8.950.000)</div>
                     </label>
                     <label class="package-option">
                         <input type="radio" name="paket" value="Paket Instansi Pendidikan" required>
-                        <div class="package-box">Paket Instansi Pendidikan</div>
+                        <div class="package-box">Paket Instansi Pendidikan (Rp 4.500.000)</div>
                     </label>
                 </div>
             </div>
@@ -195,5 +235,21 @@
         </form>
     </div>
 
+    <script>
+        function toggleQuantity(checkbox) {
+            const targetId = checkbox.getAttribute('data-target');
+            const qtyInput = document.getElementById(targetId);
+            
+            if (qtyInput) {
+                if (checkbox.checked) {
+                    qtyInput.disabled = false;
+                    qtyInput.focus();
+                } else {
+                    qtyInput.disabled = true;
+                    qtyInput.value = 1; // Reset ke default
+                }
+            }
+        }
+    </script>
 </body>
 </html>
